@@ -1,0 +1,15 @@
+// Variables
+$red-main: #ef5735;
+$tan-main: #faf0d6;
+$shadow: #949876;
+
+main {
+  background: $tan-main;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

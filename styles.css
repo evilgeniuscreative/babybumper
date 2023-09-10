@@ -1,4 +1,4 @@
-#main {
+main {
   background: #faf0d6;
   position: fixed;
   height: 100vh;
@@ -7,6 +7,5 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 0;
 }
-
-/*# sourceMappingURL=styles.css.map */

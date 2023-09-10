@@ -14,3 +14,23 @@ main {
   left: 0;
   z-index: 0;
 }
+
+.items {
+  position: absolute;
+  z-index: 1;
+}
+
+#baby {
+  bottom: 10vh;
+  left: 50vh;
+}
+
+#sofa {
+  top: 50vh;
+  left: 50vh;
+}
+
+#stool {
+  top: 50vh;
+  left: 70vh;
+}

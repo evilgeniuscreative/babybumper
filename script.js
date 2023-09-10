@@ -8,15 +8,23 @@
  *
  *
  */
+const items = document.querySelectorAll('.item');
+console.log('items', items);
+items.forEach((item) => {
+  console.log(this);
 
+  item.addEventListener('click', function () {
+    this.classList.add('tip-left');
+  });
+});
 class baby {
   constructor(name) {
     this.name = name;
   }
 
-  move(){}
+  move() {}
 
-  addToScore(){}
+  addToScore() {}
 
-  isTouching(){}
+  isTouching() {}
 }

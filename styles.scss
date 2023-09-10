@@ -15,7 +15,7 @@ main {
   z-index: 0;
 }
 
-.items {
+.items , #baby{
   position: absolute;
   z-index: 1;
 }
@@ -34,3 +34,4 @@ main {
   top: 50vh;
   left: 70vh;
 }
+

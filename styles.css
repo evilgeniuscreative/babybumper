@@ -1,3 +1,18 @@
+@keyframes tip-over-left {
+  0% {
+  }
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+@keyframes tip-over-right {
+  0% {
+  }
+  100% {
+    transform: rotate(90deg);
+  }
+}
+
 main {
   background: #faf0d6;
   position: fixed;
@@ -10,22 +25,31 @@ main {
   z-index: 0;
 }
 
-.items {
+.item,
+#baby {
+  cursor: pointer;
   position: absolute;
   z-index: 1;
 }
 
 #baby {
-  bottom: 10vh;
-  left: 50vh;
+  bottom: 50px;
+  left: 50%;
 }
 
 #sofa {
-  top: 50vh;
-  left: 50vh;
+  top: 50%;
+  left: 30%;
 }
 
 #stool {
-  top: 50vh;
-  left: 70vh;
+  top: 35%;
+  left: 50%;
+}
+
+.tip-right {
+  animation: tip-over-right 0.3s 1 ease-in forwards;
+}
+.tip-left {
+  animation: tip-over-left 0.3s 1 ease-in forwards;
 }

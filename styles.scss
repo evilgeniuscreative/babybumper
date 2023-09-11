@@ -3,10 +3,16 @@ $red-main: #ef5735;
 $tan-main: #faf0d6;
 $shadow: #949876;
 
+@keyframes tilt-left {
+}
+body {
+  position: relative;
+}
+
 main {
   background: $tan-main;
   position: fixed;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   top: 0;
   right: 0;
@@ -14,24 +20,49 @@ main {
   left: 0;
   z-index: 0;
 }
+.somchange {
+  margin: 0;
+  display: block;
+}
 
-.items , #baby{
+.item {
   position: absolute;
   z-index: 1;
 }
 
 #baby {
-  bottom: 10vh;
-  left: 50vh;
+  position: absolute;
+  z-index: 100;
+}
+
+.scenery {
+  position: absolute;
+  z-index: 0;
+}
+
+#rug {
+  bottom: 0%;
+  left: 50%;
+  width: 600px;
+  margin: 0 auto;
+  transform: translate(-50%, -50%);
+}
+
+#rug img {
+  width: 100%;
+}
+
+#baby {
+  bottom: 15%;
+  left: 41.5%;
 }
 
 #sofa {
-  top: 50vh;
-  left: 50vh;
+  top: 10%;
+  left: 38%;
 }
 
 #stool {
-  top: 50vh;
-  left: 70vh;
+  top: 45%;
+  left: 20%;
 }
-

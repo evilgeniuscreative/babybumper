@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "sass": "^1.66.1"
+    "sass": "^1.66.1",
+    "scss-lint": "^0.0.0"
   },
   "devDependencies": {
     "gulp": "^4.0.2",

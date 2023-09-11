@@ -1,22 +1,12 @@
-@keyframes tip-over-left {
-  0% {
-  }
-  100% {
-    transform: rotate(-90deg);
-  }
-}
-@keyframes tip-over-right {
-  0% {
-  }
-  100% {
-    transform: rotate(90deg);
-  }
+@keyframes tilt-left {}
+body {
+  position: relative;
 }
 
 main {
   background: #faf0d6;
   position: fixed;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   top: 0;
   right: 0;
@@ -25,31 +15,51 @@ main {
   z-index: 0;
 }
 
-.item,
-#baby {
-  cursor: pointer;
+.somchange {
+  margin: 0;
+  display: block;
+}
+
+.item {
   position: absolute;
   z-index: 1;
 }
 
 #baby {
-  bottom: 50px;
+  position: absolute;
+  z-index: 100;
+}
+
+.scenery {
+  position: absolute;
+  z-index: 0;
+}
+
+#rug {
+  bottom: 0%;
   left: 50%;
+  width: 600px;
+  margin: 0 auto;
+  transform: translate(-50%, -50%);
+}
+
+#rug img {
+  width: 100%;
+}
+
+#baby {
+  bottom: 15%;
+  left: 41.5%;
 }
 
 #sofa {
-  top: 50%;
-  left: 30%;
+  top: 10%;
+  left: 38%;
 }
 
 #stool {
-  top: 35%;
-  left: 50%;
+  top: 45%;
+  left: 20%;
 }
 
-.tip-right {
-  animation: tip-over-right 0.3s 1 ease-in forwards;
-}
-.tip-left {
-  animation: tip-over-left 0.3s 1 ease-in forwards;
-}
+/*# sourceMappingURL=styles.css.map */

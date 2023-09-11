@@ -5,7 +5,14 @@ var sass = require('gulp-sass')(require('sass'));
 gulp.task('sass', function (cb) {
   gulp
     .src('*.scss')
-    .pipe(sass())
+    .pipe(
+      sass({
+        errLogToConsole: false,
+        onError: function (err) {
+          return notify().write(err);
+        },
+      })
+    )
     .pipe(
       gulp.dest(function (f) {
         return f.base;

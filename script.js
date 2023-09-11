@@ -11,10 +11,10 @@
 const items = document.querySelectorAll('.item');
 console.log('items', items);
 items.forEach((item) => {
-  console.log(this);
+  console.log(item);
 
   item.addEventListener('click', function () {
-    this.classList.add('tip-left');
+    this.classList.toggle('tip-left');
   });
 });
 class baby {

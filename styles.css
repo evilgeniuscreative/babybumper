@@ -1,11 +1,13 @@
 @keyframes tip-over-left {
   100% {
     transform: rotate(-90deg);
+    transform-origin: bottom left;
   }
 }
 @keyframes tip-over-right {
   100% {
     transform: rotate(90deg);
+    transform-origin: bottom left;
   }
 }
 body {

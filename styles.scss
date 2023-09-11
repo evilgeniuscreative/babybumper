@@ -8,6 +8,7 @@ $shadow: #949876;
   }
   100% {
     transform: rotate(-90deg);
+    transform-origin: bottom left;
   }
 }
 
@@ -16,6 +17,7 @@ $shadow: #949876;
   }
   100% {
     transform: rotate(90deg);
+    transform-origin: bottom left;
   }
 }
 

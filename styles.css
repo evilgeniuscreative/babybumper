@@ -1,4 +1,13 @@
-@keyframes tilt-left {}
+@keyframes tip-over-left {
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+@keyframes tip-over-right {
+  100% {
+    transform: rotate(90deg);
+  }
+}
 body {
   position: relative;
 }
@@ -60,6 +69,14 @@ main {
 #stool {
   top: 45%;
   left: 20%;
+}
+
+.tip-right {
+  animation: tip-over-right 0.3s 1 ease-in forwards;
+}
+
+.tip-left {
+  animation: tip-over-left 0.3s 1 ease-in forwards;
 }
 
 /*# sourceMappingURL=styles.css.map */

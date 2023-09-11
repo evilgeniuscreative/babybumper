@@ -3,8 +3,22 @@ $red-main: #ef5735;
 $tan-main: #faf0d6;
 $shadow: #949876;
 
-@keyframes tilt-left {
+@keyframes tip-over-left {
+  0% {
+  }
+  100% {
+    transform: rotate(-90deg);
+  }
 }
+
+@keyframes tip-over-right {
+  0% {
+  }
+  100% {
+    transform: rotate(90deg);
+  }
+}
+
 body {
   position: relative;
 }
@@ -20,6 +34,7 @@ main {
   left: 0;
   z-index: 0;
 }
+
 .somchange {
   margin: 0;
   display: block;
@@ -65,4 +80,13 @@ main {
 #stool {
   top: 45%;
   left: 20%;
+}
+
+
+.tip-right {
+  animation: tip-over-right 0.3s 1 ease-in forwards;
+}
+
+.tip-left {
+  animation: tip-over-left 0.3s 1 ease-in forwards;
 }

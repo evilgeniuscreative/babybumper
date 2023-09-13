@@ -3,6 +3,9 @@ $red-main: #ef5735;
 $tan-main: #faf0d6;
 $shadow: #949876;
 
+.paresh {
+  display: block;
+}
 @keyframes tip-over-left {
   0% {
   }
@@ -50,8 +53,8 @@ main {
 
 #baby {
   border: 1px solid grey;
-  height:192px;
-  width:244px;
+  height: 192px;
+  width: 244px;
   position: absolute;
   z-index: 100;
   transition: all 0.3s;
@@ -108,7 +111,6 @@ main {
   top: 45%;
   left: 20%;
 }
-
 
 .tip-right {
   animation: tip-over-right 0.3s 1 ease-in forwards;

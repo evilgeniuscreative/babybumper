@@ -1,3 +1,7 @@
+.paresh {
+  display: block;
+}
+
 @keyframes tip-over-left {
   100% {
     transform: rotate(-90deg);

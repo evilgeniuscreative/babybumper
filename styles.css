@@ -34,11 +34,32 @@ main {
 .item {
   position: absolute;
   z-index: 1;
+  border: 1px solid grey;
 }
 
 #baby {
+  border: 1px solid grey;
+  height: 192px;
+  width: 244px;
   position: absolute;
   z-index: 100;
+  transition: all 0.3s;
+}
+#baby.going-right {
+  transform: scaleX(1);
+  transition: all 0.3s;
+}
+#baby.going-left {
+  transform: scaleX(-1);
+  transition: all 0.3s;
+}
+#baby.going-up {
+  transform: rotate(-90deg);
+  transition: all 0.3s;
+}
+#baby.going-down {
+  transform: rotate(90deg);
+  transition: all 0.3s;
 }
 
 .scenery {

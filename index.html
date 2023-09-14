@@ -16,12 +16,25 @@
       <label for="volumeControl">Volume</label>
       <input type="range" id="volumeControl" name="volumeControl" min="0" max="100" value="20" />
     </section>
+    <section id="info" class="gone">
+      <div class="close">x</div>
+      <article id="instructions">
+        <h2>How to play:</h2>
+        <ol>
+          <li>Enter your baby's name and click <span>Let's Go</span> or press <span>Enter</span></li>
+          <li>Use the <span>arrow keys</span> to control the baby's direction.</li>
+          <li>Try to knock over all the furniture in the living room that you can.</li>
+          <li>Enjoy buying more furniture.</li>
+        </ol>
+      </article>
+    </section>
     <section id="modalBG"></section>
-    <section id="startModal">
+    <section id="startModal" class="hide">
       <h1>Baby Bumper!</h1>
       <p>What's your baby's name?</p>
       <input type="text" id="inputBabyName" class="enter-baby-name" />
       <button id="start" disabled="disabled">Let's Go!</button>
+      <div id="instructionsLink"><a href="#">Instructions</a></div>
     </section>
     <section id="endModal" class="hide">
       <article class="win hide">
@@ -35,16 +48,7 @@
         <img id="baby-lose" src="img/baby-lose.webp" />
       </article> 
     --></section>
-    <section id="info" class="hide">
-      <article id="instructions">
-        <ol>
-          <li>Enter your baby's name and click <code>Let's Go</code> or press <code>Enter</code></li>
-          <li>Use the arrow keys to control the baby's direction.</li>
-          <li>Try to knock over all the furniture in the living room that you can.</li>
-          <li>Enjoy buying more furniture.</li>
-        </ol>
-      </article>
-    </section>
+
     <main>
       <section id="scoreboard">
         <div id="scoreTitle">

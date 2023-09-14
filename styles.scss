@@ -182,6 +182,50 @@ p {
 
 // GAME BASICS
 
+#info {
+  background-color: white;
+  border-radius: 16px;
+  cursor: pointer;
+  left: 60%;
+  opacity: 0;
+  padding: 15px 30px;
+  position: absolute;
+  top: 1%;
+  transition: all 0.5s;
+  z-index: 1000;
+  .close {
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    transition: all 0.5s;
+  }
+  &.show {
+    opacity: 1;
+    transition: all 0.5s;
+  }
+}
+#instructions {
+  h2 {
+    margin-left: 20px;
+  }
+  ol li {
+    font-size: 20px;
+    span {
+      font-weight: 500;
+    }
+  }
+}
+#instructionsLink {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  a {
+    font-size: 90%;
+    text-decoration: none;
+  }
+}
 .item {
   position: absolute;
   z-index: 5;
@@ -272,12 +316,13 @@ p {
 #endModal {
   background-color: white;
   border-radius: 16px;
-  position: absolute;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
   padding: 5px 50px 20px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.5s;
   z-index: 101;
 
   .enter-name {
@@ -408,12 +453,14 @@ p {
   opacity: 0;
   transition: all 0.5s;
 }
+
 .mischief-managed {
   color: white;
   font-size: 150%;
   font-weight: 500;
   transition: all 0.2s;
 }
+
 .tip-right {
   animation: tip-over-right 0.3s 1 ease-in forwards;
 }
@@ -426,6 +473,7 @@ p {
   display: none;
   transition: all 1s;
 }
+
 #vol {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.8);

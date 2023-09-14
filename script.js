@@ -7,6 +7,8 @@
 const babyContainer = document.getElementById('baby');
 const babyName = document.getElementById('babyName'); // where baby's name is rendered
 const endModal = document.getElementById('endModal');
+const info = document.getElementById('info');
+const instructions = document.getElementById('instructionsLink');
 const inputBabyName = document.getElementById('inputBabyName'); // input for baby name
 const items = document.querySelectorAll('.item'); // items.length = total number of breakable items
 const modalBG = document.getElementById('modalBG');
@@ -370,6 +372,7 @@ class baby {
     }, 300);
     endModal.style.zIndex = 101;
     endModal.classList.remove('hide');
+    endModal.classList.add('show');
     document.querySelector('.win').classList.remove('hide');
   }
 }
@@ -411,7 +414,27 @@ volumeControl.addEventListener('change', () => {
   setVolume();
 });
 
-//--------------  RANDOM NOISES  ----------------//
+instructions.addEventListener('click', () => {
+  info.classList.remove('gone');
+  setTimeout(() => {
+    info.classList.add('show');
+  }, 100);
+});
+
+info.addEventListener('click', () => {
+  info.classList.remove('show');
+  setTimeout(() => {
+    info.classList.add('hide');
+    info.classList.add('gone');
+  }, 500);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  startModal.classList.remove('hide');
+  startModal.classList.add('show');
+});
+
+//--------------  RANDOM NOISES & FUNCTIONS  ----------------//
 
 // set a random timeout
 // then play a random sound
@@ -434,6 +457,7 @@ function setVolume() {
     l.volume = vol / 100;
   });
 }
+
 function makeNoises() {
   let laughOrFart = Math.floor(Math.random() * 10);
   if (laughOrFart === 0) {

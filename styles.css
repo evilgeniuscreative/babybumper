@@ -158,6 +158,51 @@ p {
   text-align: center;
 }
 
+#info {
+  background-color: white;
+  border-radius: 16px;
+  cursor: pointer;
+  left: 60%;
+  opacity: 0;
+  padding: 15px 30px;
+  position: absolute;
+  top: 1%;
+  transition: all 0.5s;
+  z-index: 1000;
+}
+#info .close {
+  cursor: pointer;
+  padding: 5px;
+  position: absolute;
+  right: 20px;
+  top: 5px;
+  transition: all 0.5s;
+}
+#info.show {
+  opacity: 1;
+  transition: all 0.5s;
+}
+
+#instructions h2 {
+  margin-left: 20px;
+}
+#instructions ol li {
+  font-size: 20px;
+}
+#instructions ol li span {
+  font-weight: 500;
+}
+
+#instructionsLink {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+}
+#instructionsLink a {
+  font-size: 90%;
+  text-decoration: none;
+}
+
 .item {
   position: absolute;
   z-index: 5;
@@ -245,12 +290,13 @@ p {
 #endModal {
   background-color: white;
   border-radius: 16px;
-  position: absolute;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
   padding: 5px 50px 20px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.5s;
   z-index: 101;
 }
 #startModal .enter-name,

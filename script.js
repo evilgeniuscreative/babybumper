@@ -142,13 +142,13 @@ class baby {
     // get the word for current direction, i., right, left, etc.
     let currentDirection = babyContainer.className.slice(babyContainer.className.indexOf('-') + 1);
     // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+    let bounceAmount = 40;
 
     function collisionActions() {
-      console.log('collistion actions()');
       s_collision.play();
-      babyInstance.noiseAfterBump();
       if (item.classList.contains('touched')) {
         babyInstance.giggle();
+        bounceAmount = 60;
       } else {
         babyInstance.noiseAfterBump();
       }
@@ -159,23 +159,23 @@ class baby {
       case 'left':
         this.tipIt('left', item);
         collisionActions();
-        this.babyPos.left = Math.round(this.babyPos.left + 30);
+        this.babyPos.left = Math.round(this.babyPos.left + bounceAmount);
         babyContainer.style.left = this.babyPos.left + 'px';
         break;
       case 'right':
         this.tipIt('right', item);
         collisionActions();
-        this.babyPos.right = Math.round(this.babyPos.left - 30);
+        this.babyPos.right = Math.round(this.babyPos.left - bounceAmount);
         break;
       case 'up':
         this.tipIt('rand', item);
         collisionActions();
-        this.babyPos.top = Math.round(this.babyPos.top + 30);
+        this.babyPos.top = Math.round(this.babyPos.top + bounceAmount);
         break;
       case 'down':
         this.tipIt('rand', item);
         collisionActions();
-        this.babyPos.top = Math.round(this.babyPos.top - 30);
+        this.babyPos.top = Math.round(this.babyPos.top - bounceAmount);
         break;
       default:
         throw new Error("Oops, there's a bounceback issue. Can't tell where he's coming from.");
@@ -185,40 +185,45 @@ class baby {
     this.babyPos.bottom = babyContainer.getBoundingClientRect().bottom;
   }
 
-  isTouching() {
+  collisionTest(item) {
     const babyRect = babyContainer.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
+    const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
+    return horizontalOverlap && verticalOverlap;
+  }
+
+  isTouching() {
+    //const babyRect = babyContainer.getBoundingClientRect();
 
     let isColliding = false;
 
     items.forEach((item) => {
-      const itemRect = item.getBoundingClientRect();
+      //const itemRect = item.getBoundingClientRect();
+      //const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
+      //const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
-      const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
-      const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
-
-      if (horizontalOverlap && verticalOverlap) {
+      if (this.collisionTest(item)) {
+        // if it's colliding, add touched, set isColliding, bounceBabyBack, and addToScore
         item.classList.add('touched');
-        let touchedItems = document.getElementsByClassName('touched');
         isColliding = true;
         this.bounceBabyBack(item);
         this.addToScore(item);
 
-        console.log('items:', items.length, 'touchedItems:', touchedItems.length);
-
-        if (items.length === touchedItems.length) {
+        if (items.length === document.getElementsByClassName('touched').length) {
           this.endGame();
         }
       }
     });
 
-    if (!isColliding) {
-      //console.log('Baby is not colliding with any item.');
-    }
+    // if (!isColliding) {
+    //   //console.log('Baby is not colliding with any item.');
+    // }
   }
 
   move(e) {
     e = e || window.Event;
-    //console.log('moving', e.key);
+    console.log('moving', e.key);
     switch (e.key) {
       // up arrow
       case 'ArrowUp':
@@ -270,7 +275,7 @@ class baby {
       let rand = Math.floor(Math.random() * 2);
       rand = 0 ? item.classList.add('tip-left') : item.classList.add('tip-right');
     }
-    this.addToScore(item);
+    //make sure baby isn't still colliding by moving baby out of item bounds towards center
   }
 
   startGame() {
@@ -278,7 +283,7 @@ class baby {
     gameIsRunning = true;
 
     modalBG.classList.add('hide');
-    startModal.classList.add('hide');
+    startModal.classList.add('hide', 'gone');
 
     // place it behind everything else
     setTimeout(() => {

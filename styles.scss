@@ -428,6 +428,7 @@ p {
 
 .gone {
   display: none;
+  transition:all 1s;
 }
 .win,
 .lose {

@@ -10,6 +10,7 @@
  */
 const items = document.querySelectorAll( '.item' );
 const babyIcon = document.getElementById( 'baby' );
+const sofa = document.getElementById( 'sofa' );
 const objLocationMap = {};
 console.log( 'items', items );
 items.forEach( ( item, i ) => {
@@ -20,10 +21,10 @@ items.forEach( ( item, i ) => {
     } );
 
     objLocationMap[item.dataset.name] = {
-        top   : Math.ceil( item.getBoundingClientRect().top ),
-        bottom: Math.floor( item.getBoundingClientRect().bottom ),
-        left  : Math.floor( item.getBoundingClientRect().left ),
-        right : Math.floor( item.getBoundingClientRect().right ),
+        top   : Math.round( item.getBoundingClientRect().top ),
+        bottom: Math.round( item.getBoundingClientRect().bottom ),
+        left  : Math.round( item.getBoundingClientRect().left ),
+        right : Math.round( item.getBoundingClientRect().right ),
     };
 } );
 console.log( 'locations', objLocationMap );
@@ -31,49 +32,74 @@ console.log( 'locations', objLocationMap );
 class baby {
     constructor( name ) {
         this.name = name;
-        this.babyPos = {top: babyIcon.offsetTop, left: babyIcon.offsetLeft};
+        this.babyPosX = 50;
+        this.babyPosY = 350;
+        this.moveSpeed = 10;
+
+        // this.babyPos = {
+        //     top   : Math.round( babyIcon.getBoundingClientRect().top ),
+        //     bottom: Math.round( babyIcon.getBoundingClientRect().bottom ),
+        //     left  : Math.round( babyIcon.getBoundingClientRect().left ),
+        //     right : Math.round( babyIcon.getBoundingClientRect().right ),
+        // };
     }
 
     setDirectionClass( direction ) {
         babyIcon.className = '';
         babyIcon.classList.add( 'going-' + direction );
-        if ( direction === 'up' || direction === 'down' ) {
-            babyIcon.style.top = this.babyPos.top.toString() + 'px';
-        } else if ( direction === 'left' || direction === 'right' ) {
-            babyIcon.style.left = this.babyPos.left.toString() + 'px';
+        // if ( direction === 'up' || direction === 'down' ) {
+        //     babyIcon.style.top = this.babyPos.top.toString() + 'px';
+        //
+        // } else if ( direction === 'left' || direction === 'right' ) {
+        //     babyIcon.style.left = this.babyPos.left.toString() + 'px';
+        // }
+    }
+
+    update() {
+        babyIcon.style.left = this.babyPosX + 'px';
+        babyIcon.style.top = this.babyPosY + 'px';
+        if ( this.isColliding( babyIcon, sofa ) ) {
+            console.log( 'collision detected' );
         }
+        requestAnimationFrame( this.update );
+    }
+
+    isColliding( babyWrapper, itemDiv ) {
+        const babyCoords = babyWrapper.getBoundingClientRect();
+        const itemCoords = itemDiv.getBoundingClientRect();
+        return !(babyCoords.right < itemCoords.left || babyCoords.left > itemCoords.right ||
+            babyCoords.bottom < itemCoords.top || babyCoords.top > itemCoords.bottom);
     }
 
     move( e ) {
         e = e || window.Event;
-        console.log( 'moving', e.key );
+        // console.log( 'moving', e.key );
         switch ( e.key ) {
             // up arrow
             case 'ArrowUp':
-                this.babyPos.top = Math.round( this.babyPos.top - 10 );
+                this.babyPosY -= this.moveSpeed;
                 this.setDirectionClass( 'up' );
                 break;
             // down arrow
             case 'ArrowDown':
-                this.babyPos.top = Math.round( this.babyPos.top + 10 );
+                this.babyPosY += this.moveSpeed;
                 this.setDirectionClass( 'down' );
                 break;
             // left arrow
             case 'ArrowLeft':
-                this.babyPos.left = Math.round( this.babyPos.left - 10 );
+                this.babyPosX -= this.moveSpeed;
                 this.setDirectionClass( 'left' );
                 break;
             // right arrow
             case 'ArrowRight':
-                this.babyPos.left = Math.round( this.babyPos.left ) + 10;
+                this.babyPosX += this.moveSpeed;
                 this.setDirectionClass( 'right' );
                 break;
             default:
                 console.log( 'something is wrong in the direction switch. Keypress was:', e.key );
                 break;
         }
-        this.babyPos.right = babyIcon.getBoundingClientRect().right;
-        this.babyPos.bottom = babyIcon.getBoundingClientRect().bottom;
+
         this.isTouching();
     }
 
@@ -81,45 +107,25 @@ class baby {
     }
 
     isTouching() {
-        let verticalTouch = false;
-        let horizontalTouch = false;
+        let isColliding = false;
         Object.entries( objLocationMap ).forEach( ( entry ) => {
             const [itemName, itemPos] = entry;
             console.log( 'NAME:', itemName, 'COORD:', itemPos );
-            console.log( 'babyPosition', this.babyPos );
+            // console.log( 'babyPosition', this.babyPos );
+            console.log( 'babyPosX:', this.babyPosX, 'babyPosY:', this.babyPosY );
 
-// if it's in-between the item top and bottom AND in-between item's left and right, it's touching
-            // top 0 => top 1000
-            // left 0 => left 1000
-
-            const hTouch = this.babyPos.right >= itemPos.left || this.babyPos.left <= itemPos.right; // horizontal plane match
-            const vTouch = this.babyPos.top <= itemPos.bottom || this.babyPos.bottom >= itemPos.top; // vertical plane match
-
-
-            console.log( 'vTouch:', vTouch, 'hTouch', hTouch );
-            console.log( 'isTouching:', vTouch && hTouch );
 
         } );
 
-        if ( horizontalTouch || verticalTouch ) {
-            // Elements are touching each other
-        }
+
     }
 }
 
 
 const screenBaby = new baby( 'Toby' );
 
-
-babyIcon.addEventListener( 'click', () => {
-    console.log( 'Baby clicked' );
-} );
-
 window.addEventListener( 'keydown', ( e ) => {
     screenBaby.move( e );
 } );
 
-
-;
-window.screen.height
 

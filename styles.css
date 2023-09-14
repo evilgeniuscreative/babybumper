@@ -297,6 +297,7 @@ p {
 #damages {
   font-size: 30px;
   align-self: center;
+  transition: all 0.3s;
 }
 
 #cabinet {
@@ -316,7 +317,7 @@ p {
 }
 
 #sofa {
-  top: 10%;
+  top: 30%;
   left: 38%;
 }
 
@@ -338,6 +339,13 @@ p {
 .hide {
   opacity: 0;
   transition: all 0.5s;
+}
+
+.mischief-managed {
+  color: white;
+  font-size: 150%;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .tip-right {

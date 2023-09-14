@@ -32,8 +32,14 @@ console.log( 'locations', objLocationMap );
 class baby {
     constructor( name ) {
         this.name = name;
-        this.babyPos = {top: babyIcon.offsetTop, left: babyIcon.offsetLeft};
+        this.babyPos = {
+            top   : Math.round( babyIcon.getBoundingClientRect().top ),
+            bottom: Math.round( babyIcon.getBoundingClientRect().bottom ),
+            left  : Math.round( babyIcon.getBoundingClientRect().left ),
+            right : Math.round( babyIcon.getBoundingClientRect().right )
+        }
     }
+
 
     setDirectionClass( direction ) {
         babyIcon.className = '';
@@ -92,13 +98,21 @@ class baby {
 // if it's in-between the item top and bottom AND in-between item's left and right, it's touching
             // top 0 => top 1000
             // left 0 => left 1000
+            // top is inside or bottom is inside
+            // left is inside or right is inside
 
-            const horizontalTouch = this.babyPos.right >= itemPos.left && this.babyPos.left <= itemPos.right; // horizontal plane match
-            const verticalTouch = this.babyPos.top <= itemPos.bottom && this.babyPos.bottom >= itemPos.top; // vertical plane match
+            const topTouch = this.babyPos.top <= itemPos.bottom;
+            const bottomTouch = this.babyPos.bottom >= itemPos.top;
+            const leftTouch = this.babyPos.left <= itemPos.right;
+            const rightTouch = this.babyPos.right >= itemPos.left;
 
+            const hTouch = this.babyPos.right <= itemPos.left && this.babyPos.left >= itemPos.right; // horizontal plane match
 
-            console.log( 'vertical:', verticalTouch, 'horiz:', horizontalTouch );
-            console.log( 'isTouching:', verticalTouch && horizontalTouch );
+            const vTouch = this.babyPos.top <= itemPos.bottom && this.babyPos.bottom >= itemPos.top; // vertical plane match
+
+            // console.log( 'topT:', topTouch, 'botT:', bottomTouch, 'leftT:', leftTouch, 'rightT:', rightTouch );
+            console.log( 'vertical:', vTouch, 'horiz:', hTouch );
+            console.log( 'isTouching:', hTouch && vTouch );
 
         } );
 

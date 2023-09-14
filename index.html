@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="script.js"></script>
-    <link rel="stylesheet" href="styles.css" />
-    <title>Baby Bumper Game</title>
-  </head>
-  <body>
-    <main>
-      <div id="scoreboard"></div>
-      <section id="livingRoom">
-        <figure id="baby" data-name="baby">
-          <img src="img/baby.webp" alt="Baby" />
-        </figure>
-        <figure class="item" id="sofa" data-name="sofa">
-          <img src="img/sofa.webp" alt="Sofa" />
-        </figure>
-        <figure class="item" id="stool" data-name="stool">
-          <img src="img/stool.webp" alt="Stool" />
-        </figure>
-        <figure id="rug" class="scenery" data-name="rug">
-          <img src="img/polar-bear-rug.webp" alt="" />
-        </figure>
-      </section>
-    </main>
-  </body>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Collision Detection</title>
+    <style>
+        .entity {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+        }
+
+        #playerEntity {
+            background-color: red;
+            top: 50px;
+            left: 50px;
+        }
+
+        #obstacleEntity {
+            background-color: blue;
+            top: 120px;
+            left: 120px;
+        }
+    </style>
+</head>
+<body>
+<div id="playerEntity" class="entity"></div>
+<div id="obstacleEntity" class="entity"></div>
+<script src="app.js"></script>
+</body>
 </html>

@@ -3,10 +3,6 @@ $red-main: #ef5735;
 $tan-main: #faf0d6;
 $shadow: #949876;
 
-.paresh {
-  display: block;
-}
-
 @keyframes tip-over-left {
   0% {
   }
@@ -49,15 +45,14 @@ main {
 .item {
   position: absolute;
   z-index: 1;
-  border: 1px solid grey;
 }
 
 #baby {
-  border: 2px solid red;
-  border-top-color: turquoise;
-  border-bottom-color: blue;
-  border-left-color: lavenderblush;
-  border-right-color: red;
+  // border: 2px solid red;
+  // border-top-color: turquoise;
+  // border-bottom-color: blue;
+  // border-left-color: lavenderblush;
+  // border-right-color: red;
   height: 192px;
   width: 244px;
   position: absolute;

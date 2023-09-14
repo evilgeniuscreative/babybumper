@@ -17,7 +17,9 @@ const s_boing = new Audio('sounds/boing.mp3');
 const s_collision = new Audio('sounds/collision.mp3');
 const s_wah = new Audio('sounds/wah.mp3');
 const s_crying = new Audio('sounds/crying.mp3');
-const s_laugh = new Audio('sounds/giggle.mp3');
+const s_giggle = new Audio('sounds/giggle.mp3');
+const s_laugh = new Audio('sounds/laugh.mp3');
+const s_fart = new Audio('sounds/fart.mp3');
 const s_crash = new Audio('sounds/crash-loud-short.mp3');
 const s_end = new Audio('sounds/endgame.mp3');
 const s_glass_break = new Audio('sounds/glass-break-short.mp3');
@@ -70,6 +72,10 @@ class baby {
     }, 4300);
   }
 
+  giggle() {
+    s_giggle.play();
+  }
+
   move(e) {
     e = e || window.Event;
     //console.log('moving', e.key);
@@ -105,42 +111,74 @@ class baby {
 
   addToScore() {}
 
-  bounceBabyBack() {
+  tipIt(dir, item) {
+    if (dir === 'left') {
+      item.classList.add('tip-left');
+    } else if (dir === 'right') {
+      item.classList.add('tip-right');
+    } else {
+      let rand = Math.floor(Math.random() * 2);
+      rand = 0 ? item.classList.add('tip-left') : item.classList.add('tip-right');
+    }
+  }
+  bounceBabyBack(item) {
     // get the word for current direction, i., right, left, etc.
     let currentDir = babyIcon.className.slice(babyIcon.className.indexOf('-') + 1);
-    console.log('Stop Baby:');
-    console.log('currentDir', currentDir, this.babyPos);
-
     // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+
+    item.classList.remove('tilt-left');
+    item.classList.remove('tilt-right');
     switch (currentDir) {
       case 'left':
-        console.log('bounce right 10 px from', this.babyPos.left);
+        this.tipIt('left', item);
         s_collision.play();
         this.cry();
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.cry();
+        }
         this.babyPos.left = Math.round(this.babyPos.left + 30);
         babyIcon.style.left = this.babyPos.left + 'px';
         break;
       case 'right':
+        this.tipIt('right', item);
         s_collision.play();
-        this.cry();
-        console.log('bounce left 10 px from', this.babyPos.left);
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.cry();
+        }
         this.babyPos.right = Math.round(this.babyPos.left - 30);
         break;
       case 'up':
+        this.tipIt('rand', item);
         s_collision.play();
-        this.cry();
-        console.log('bounce top 10 px from', this.babyPos.top);
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.cry();
+        }
         this.babyPos.top = Math.round(this.babyPos.top + 30);
         break;
       case 'down':
+        this.tipIt('rand', item);
         s_collision.play();
-        this.cry();
-        console.log('bounce bottom 10 px from', this.babyPos.top);
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.cry();
+        }
         this.babyPos.bottom = Math.round(this.babyPos.top - 30);
         break;
       default:
         throw new Error("Oops, there's a bouneback issue. Can't tell where he's coming from.");
         break;
+    }
+
+    let randomFart = Math.floor(Math.random() * 3);
+    if (randomFart === 3) {
+      s_fart.play();
     }
 
     this.babyPos.right = babyIcon.getBoundingClientRect().right;
@@ -169,7 +207,8 @@ class baby {
       if (horizontalOverlap && verticalOverlap) {
         console.log('😳 👼🏻  Baby is colliding with item:', item.dataset.name);
         isColliding = true;
-        this.bounceBabyBack();
+        item.classList.add('touched');
+        this.bounceBabyBack(item);
       }
     });
 

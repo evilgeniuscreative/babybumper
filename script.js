@@ -1,26 +1,30 @@
-ScriptProcessorNode;
 /*
  *
- *
- *
+ * BABY BUMPER
+ * The game where you're the baby for real this time ;)
  *
  */
-const items = document.querySelectorAll('.item');
+const items = document.querySelectorAll('.item'); // items.length = total number of items
 const babyIcon = document.getElementById('baby');
 const enterBabyName = document.getElementById('enterBabyName');
 const startButton = document.getElementById('start');
-const modal = document.getElementById('modalBG');
+const modalBG = document.getElementById('modalBG');
+const startModal = document.getElementById('startModal');
+const endModal = document.getElementById('endModal');
 const babyName = document.getElementById('babyName');
 const scorekeeper = document.getElementById('score');
+const startRegex = /enter|return/i;
+
 let screenBaby;
 let gameRunning = false;
-let score = 0;
-// baby image is 244 x 192
+let damages = 0;
 
 // set baby starting position
+// baby image is 244 x 192
 babyIcon.style.top = window.innerHeight - 325 + 'px';
 babyIcon.style.left = window.innerWidth / 2 - 150 + 'px';
-const itemReference = {};
+
+const itemPositionReference = {};
 
 // SOUNDS
 const fart = [];
@@ -45,7 +49,7 @@ const s_moving_chair = new Audio('sounds/moving-chair.mp3');
 const s_moving_furn = new Audio('sounds/moving-furniture.mp3');
 
 items.forEach((item, i) => {
-  itemReference[item.dataset.name] = {
+  itemPositionReference[item.dataset.name] = {
     top: Math.round(item.getBoundingClientRect().top),
     bottom: Math.round(item.getBoundingClientRect().bottom),
     left: Math.round(item.getBoundingClientRect().left),
@@ -55,79 +59,29 @@ items.forEach((item, i) => {
   };
 });
 
+//--------------  MAIN BABY CLASS  ----------------//
+
 class baby {
   constructor(name) {
     this.name = name;
     this.babyPos = { top: babyIcon.offsetTop, left: babyIcon.offsetLeft };
   }
 
+  //-------------- SCORING  ----------------//
+
   addToScore(item) {
+    console.log('addToScore', item.dataset.cost);
     // prevent double scoring for same item
-    if (!item.classList.contains('touched')) {
-      score += parseInt(item.dataset.cost);
-      scorekeeper.textContent = score;
+    if (!item.classList.contains('damaged')) {
+      item.classList.add('damaged');
+      damages += parseInt(item.dataset.cost);
+      scorekeeper.textContent = damages;
     }
   }
 
-  bounceBabyBack(item) {
-    // get the word for current direction, i., right, left, etc.
-    let currentDir = babyIcon.className.slice(babyIcon.className.indexOf('-') + 1);
-    // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+  //--------------  SOUND ACTIONS  ----------------//
 
-    item.classList.remove('tilt-left');
-    item.classList.remove('tilt-right');
-    switch (currentDir) {
-      case 'left':
-        this.tipIt('left', item);
-        s_collision.play();
-        this.cry();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.left = Math.round(this.babyPos.left + 30);
-        babyIcon.style.left = this.babyPos.left + 'px';
-        break;
-      case 'right':
-        this.tipIt('right', item);
-        s_collision.play();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.right = Math.round(this.babyPos.left - 30);
-        break;
-      case 'up':
-        this.tipIt('rand', item);
-        s_collision.play();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.top = Math.round(this.babyPos.top + 30);
-        break;
-      case 'down':
-        this.tipIt('rand', item);
-        s_collision.play();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.top = Math.round(this.babyPos.top - 30);
-        break;
-      default:
-        throw new Error("Oops, there's a bounceback issue. Can't tell where he's coming from.");
-        break;
-    }
-    this.babyPos.right = babyIcon.getBoundingClientRect().right;
-    this.babyPos.bottom = babyIcon.getBoundingClientRect().bottom;
-  }
-
-  cry() {
+  noiseAfterBump() {
     setTimeout(() => {
       document.getElementById('babyImg').src = 'img/baby-cry.webp';
       s_crying.play();
@@ -141,6 +95,67 @@ class baby {
   giggle() {
     laugh[0].play();
   }
+
+  //--------------  MOVEMENT AND COLLISSIONS  ----------------//
+
+  bounceBabyBack(item) {
+    // get the word for current direction, i., right, left, etc.
+    let currentDir = babyIcon.className.slice(babyIcon.className.indexOf('-') + 1);
+    // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+
+    item.classList.remove('tilt-left');
+    item.classList.remove('tilt-right');
+    switch (currentDir) {
+      case 'left':
+        this.tipIt('left', item);
+        s_collision.play();
+        this.noiseAfterBump();
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.noiseAfterBump();
+        }
+        this.babyPos.left = Math.round(this.babyPos.left + 30);
+        babyIcon.style.left = this.babyPos.left + 'px';
+        break;
+      case 'right':
+        this.tipIt('right', item);
+        s_collision.play();
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.noiseAfterBump();
+        }
+        this.babyPos.right = Math.round(this.babyPos.left - 30);
+        break;
+      case 'up':
+        this.tipIt('rand', item);
+        s_collision.play();
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.noiseAfterBump();
+        }
+        this.babyPos.top = Math.round(this.babyPos.top + 30);
+        break;
+      case 'down':
+        this.tipIt('rand', item);
+        s_collision.play();
+        if (item.classList.contains('touched')) {
+          this.giggle();
+        } else {
+          this.noiseAfterBump();
+        }
+        this.babyPos.top = Math.round(this.babyPos.top - 30);
+        break;
+      default:
+        throw new Error("Oops, there's a bounceback issue. Can't tell where he's coming from.");
+        break;
+    }
+    this.babyPos.right = babyIcon.getBoundingClientRect().right;
+    this.babyPos.bottom = babyIcon.getBoundingClientRect().bottom;
+  }
+
   isTouching() {
     const babyRect = babyIcon.getBoundingClientRect();
 
@@ -153,10 +168,17 @@ class baby {
       const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
       if (horizontalOverlap && verticalOverlap) {
+        item.classList.add('touched');
+        let touchedItemsLength = document.getElementsByClassName('touched').length;
         isColliding = true;
         this.bounceBabyBack(item);
-        item.classList.add('touched');
         this.addToScore(item);
+
+        console.log('items:', items.length, 'touchedItems:', touchedItemsLength);
+
+        if (items.length === touchedItemsLength) {
+          this.endGame();
+        }
       }
     });
 
@@ -198,6 +220,8 @@ class baby {
     this.isTouching();
   }
 
+  //--------------  ORIENTATION  ----------------//
+
   setDirectionClass(direction) {
     babyIcon.className = '';
     babyIcon.classList.add('going-' + direction);
@@ -219,7 +243,37 @@ class baby {
     }
     this.addToScore(item);
   }
+
+  startGame() {
+    babyName.textContent = enterBabyName.value.toUpperCase() + "'S";
+    gameRunning = true;
+
+    modalBG.classList.add('hide');
+    startModal.classList.add('hide');
+
+    // place it behind everything else
+    setTimeout(() => {
+      modalBG.style.zIndex = -10;
+    }, 505);
+  }
+
+  endGame() {
+    console.log('Game Ended');
+    modalBG.classList.remove('hide');
+    setTimeout(() => {
+      modalBG.style.zIndex = 100;
+    }, 300);
+    endModal.style.zIndex = 101;
+    endModal.classList.remove('hide');
+    document.querySelector('.win').classList.remove('hide');
+  }
 }
+
+function liftOff() {
+  screenBaby = new baby(enterBabyName.value);
+  screenBaby.startGame();
+}
+//--------------  EVENT LISTENERS  ----------------//
 
 window.addEventListener('keydown', (e) => {
   if (gameRunning) {
@@ -233,33 +287,43 @@ enterBabyName.addEventListener('keyup', () => {
   }
 });
 
-startButton.addEventListener('click', () => {
-  screenBaby = new baby(enterBabyName.value);
-  babyName.textContent = enterBabyName.value.toUpperCase() + "'S";
-  gameRunning = true;
-  modal.classList.add('hide');
-  setTimeout(() => {
-    modal.style.zIndex = -10;
-  }, 505);
+enterBabyName.addEventListener('keypress', (e) => {
+  console.log('e.key', e.key, e.key.match(startRegex) !== null);
+  if (e.key.match(startRegex) !== null) {
+    liftOff();
+  }
 });
 
-let iterations = 1;
-(function gig(iterations) {
-  iterations += 1;
-  if (iterations <= 50) {
-    // TODO: need to create a minimum time between noises
-    let soundPause = Math.floor(Math.random() * 200000 + 14000);
-    setTimeout(() => {
-      let laughOrFart = Math.floor(Math.random() * 10);
-      if (laughOrFart === 0) {
-        // fart
-        let fartNum = Math.floor(Math.random() * 3);
-        fart[fartNum].play();
-      } else {
-        let laughNum = Math.floor(Math.random() * 10);
-        laugh[laughNum].play();
-      }
-    }, soundPause);
-    gig(iterations);
+startButton.addEventListener('click', () => {
+  liftOff();
+});
+
+//--------------  RANDOM NOISES  ----------------//
+
+// set a random timeout
+// then play a random sound
+
+function soundPause() {
+  let delayTime = Math.floor(Math.random() * 5000 + 2500);
+  return delayTime;
+}
+
+function makeNoises() {
+  console.log('make noises');
+  let laughOrFart = Math.floor(Math.random() * 10);
+  if (laughOrFart === 0) {
+    // fart
+    let fartNum = Math.floor(Math.random() * 3);
+    fart[fartNum].play();
+  } else {
+    let laughNum = Math.floor(Math.random() * 10);
+    laugh[laughNum].play();
   }
-})(iterations);
+}
+
+// (function noiseLoop() {
+//   setTimeout(() => {
+//     makeNoises();
+//     noiseLoop();
+//   }, soundPause());
+// })();

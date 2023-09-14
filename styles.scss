@@ -34,6 +34,102 @@ $shadow: #949876;
   }
 }
 
+@keyframes rocking {
+  0% {
+    transform: rotate(0deg);
+  }
+  3.33% {
+    transform: rotate(1deg);
+  }
+  6.67% {
+    transform: rotate(2deg);
+  }
+  10% {
+    transform: rotate(3deg);
+  }
+  13.33% {
+    transform: rotate(4deg);
+  }
+  16.67% {
+    transform: rotate(5deg);
+  }
+  20% {
+    transform: rotate(6deg);
+  }
+  23.33% {
+    transform: rotate(7deg);
+  }
+  26.67% {
+    transform: rotate(8deg);
+  }
+  30% {
+    transform: rotate(9deg);
+  }
+  33.33% {
+    transform: rotate(10deg);
+  }
+  36.67% {
+    transform: rotate(11deg);
+  }
+  40% {
+    transform: rotate(12deg);
+  }
+  43.33% {
+    transform: rotate(13deg);
+  }
+  46.67% {
+    transform: rotate(14deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  53.33% {
+    transform: rotate(14deg);
+  }
+  56.67% {
+    transform: rotate(13deg);
+  }
+  60% {
+    transform: rotate(12deg);
+  }
+  63.33% {
+    transform: rotate(11deg);
+  }
+  66.67% {
+    transform: rotate(10deg);
+  }
+  70% {
+    transform: rotate(9deg);
+  }
+  73.33% {
+    transform: rotate(8deg);
+  }
+  76.67% {
+    transform: rotate(7deg);
+  }
+  80% {
+    transform: rotate(6deg);
+  }
+  83.33% {
+    transform: rotate(5deg);
+  }
+  86.67% {
+    transform: rotate(4deg);
+  }
+  90% {
+    transform: rotate(3deg);
+  }
+  93.33% {
+    transform: rotate(2deg);
+  }
+  96.67% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
 // ELEMENTS
 
 body {
@@ -43,6 +139,8 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  height: 100vh;
+  width: 100%;
 }
 
 main {
@@ -57,6 +155,23 @@ main {
   bottom: 0;
   left: 0;
   z-index: 0;
+}
+
+h1 {
+  font-size: 60px;
+  letter-spacing: 1.25px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+p {
+  font-size: 24px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  margin: 0 0 5px 0;
+  padding: 0;
+  text-align: center;
 }
 
 // GAME BASICS
@@ -105,37 +220,35 @@ main {
   margin-bottom: -4px;
 }
 
+#baby-lose {
+  animation: rocking 0.5s infinite;
+}
+
+#baby-win {
+  animation: rocking 1s infinite;
+}
+
 #modalBG {
   animation: bgOpacity 5s infinite;
   left: 0;
   width: 100%;
   height: 100vh;
   position: absolute;
-  z-index: 999999;
+  z-index: 100;
 }
-#modal {
+
+#startModal,
+#endModal {
   background-color: white;
   border-radius: 16px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
   padding: 5px 50px 20px;
-  h1 {
-    font-size: 60px;
-    letter-spacing: 1.25px;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-  p {
-    font-size: 24px;
-    font-weight: 200;
-    letter-spacing: 1px;
-    margin: 0 0 5px 0;
-    padding: 0;
-    text-align: center;
-  }
+  z-index: 101;
+
   .enter-name {
     margin: 0 auto;
     text-align: center;
@@ -177,6 +290,10 @@ main {
   }
 }
 
+#endModal {
+  z-index: -29;
+}
+
 .scenery {
   position: absolute;
   z-index: 0;
@@ -194,14 +311,14 @@ main {
   border-radius: 8px;
   top: 20px;
   right: 20px;
-  z-index: 99999;
+  z-index: 99;
 }
 #scoreTitle {
   margin-top: -7px;
 }
-#score {
-  align-self: center;
+#damages {
   font-size: 30px;
+  align-self: center;
 }
 // ITEMS
 

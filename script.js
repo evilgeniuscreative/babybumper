@@ -1,7 +1,3 @@
-// create a baby class
-// - add move method, up down left right depending on the input
-// - add addToScore method to update score
-// - add isTouching method to determine if the baby is touching anything
 /*
  *
  *
@@ -11,10 +7,8 @@
 const items = document.querySelectorAll('.item');
 const babyIcon = document.getElementById('baby');
 const objLocationMap = {};
-console.log('items', items);
-items.forEach((item, i) => {
-  console.log('item', i, item.dataset.name);
 
+items.forEach((item, i) => {
   item.addEventListener('click', function () {
     this.classList.toggle('tip-left');
   });
@@ -113,5 +107,3 @@ babyIcon.addEventListener('click', () => {
 window.addEventListener('keydown', (e) => {
   screenBaby.move(e);
 });
-
-window.screen.height;

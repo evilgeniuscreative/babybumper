@@ -12,6 +12,7 @@ const items = document.querySelectorAll( '.item' );
 const babyIcon = document.getElementById( 'baby' );
 const objLocationMap = {};
 console.log( 'items', items );
+
 items.forEach( ( item, i ) => {
     console.log( 'item', i, item.dataset.name );
 
@@ -20,10 +21,10 @@ items.forEach( ( item, i ) => {
     } );
 
     objLocationMap[item.dataset.name] = {
-        top   : Math.ceil( item.getBoundingClientRect().top ),
-        bottom: Math.floor( item.getBoundingClientRect().bottom ),
-        left  : Math.floor( item.getBoundingClientRect().left ),
-        right : Math.floor( item.getBoundingClientRect().right ),
+        top   : Math.round( item.getBoundingClientRect().top ),
+        bottom: Math.round( item.getBoundingClientRect().bottom ),
+        left  : Math.round( item.getBoundingClientRect().left ),
+        right : Math.round( item.getBoundingClientRect().right ),
     };
 } );
 console.log( 'locations', objLocationMap );
@@ -92,12 +93,12 @@ class baby {
             // top 0 => top 1000
             // left 0 => left 1000
 
-            const hTouch = this.babyPos.right >= itemPos.left || this.babyPos.left <= itemPos.right; // horizontal plane match
-            const vTouch = this.babyPos.top <= itemPos.bottom || this.babyPos.bottom >= itemPos.top; // vertical plane match
+            const horizontalTouch = this.babyPos.right >= itemPos.left && this.babyPos.left <= itemPos.right; // horizontal plane match
+            const verticalTouch = this.babyPos.top <= itemPos.bottom && this.babyPos.bottom >= itemPos.top; // vertical plane match
 
 
-            console.log( 'vTouch:', vTouch, 'hTouch', hTouch );
-            console.log( 'isTouching:', vTouch && hTouch );
+            console.log( 'vertical:', verticalTouch, 'horiz:', horizontalTouch );
+            console.log( 'isTouching:', verticalTouch && horizontalTouch );
 
         } );
 

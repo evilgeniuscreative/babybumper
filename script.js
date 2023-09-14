@@ -1,25 +1,31 @@
 /*
  *
  * BABY BUMPER
- * The game where you're the baby for real this time ;)
+ * The game where you're the baby -- for real this time ;)
  *
  */
-const items = document.querySelectorAll('.item'); // items.length = total number of items
 const babyContainer = document.getElementById('baby');
-const inputBabyName = document.getElementById('inputBabyName');
-const startButton = document.getElementById('start');
-const modalBG = document.getElementById('modalBG');
-const startModal = document.getElementById('startModal');
+const babyName = document.getElementById('babyName'); // where baby's name is rendered
 const endModal = document.getElementById('endModal');
-const babyName = document.getElementById('babyName');
+const inputBabyName = document.getElementById('inputBabyName'); // input for baby name
+const items = document.querySelectorAll('.item'); // items.length = total number of breakable items
+const modalBG = document.getElementById('modalBG');
 const runningScoreDisplay = document.getElementById('runningScoreDisplay');
-let runningScore = parseInt(runningScoreDisplay.textContent);
-
+const startButton = document.getElementById('start');
+const startModal = document.getElementById('startModal');
 const startRegex = /enter|return/i;
+const volumeControl = document.getElementById('volumeControl');
+
+const centerpoint = {
+  horiz: window.innerWidth / 2,
+  vert: window.innerHeight / 2,
+};
 
 let babyInstance;
-let gameIsRunning = false;
 let endDamages = 0;
+let gameIsRunning = false;
+let lastCollision = Date.now();
+let runningScore = parseInt(runningScoreDisplay.textContent);
 
 // set baby starting position
 // baby image is 244 x 192
@@ -28,28 +34,33 @@ babyContainer.style.left = window.innerWidth / 2 - 150 + 'px';
 
 const itemPositionReference = {};
 
-// SOUNDS
+// SOUNDS -- commented out are more for future use
 const fart = [];
 const laugh = [];
+
 const s_boing = new Audio('sounds/boing.mp3');
 const s_collision = new Audio('sounds/collision.mp3');
-const s_wah = new Audio('sounds/wah.mp3');
+const s_crash = new Audio('sounds/crash-loud-short.mp3');
 const s_crying = new Audio('sounds/crying.mp3');
+const s_ding = new Audio('sounds/ding.mp3');
+// const s_drumroll = new Audio('sounds/drumroll.mp3');
+// const s_end = new Audio('sounds/endgame.mp3');
 const s_giggle = new Audio('sounds/laugh_0.mp3');
+// const s_glass_break = new Audio('sounds/glass-break-short.mp3');
+const s_glass_deeper = new Audio('sounds/glass-break-deeper.mp3');
+// const s_mouth_harp = new Audio('sounds/mouth-harp.mp3');
+// const s_moving_chair = new Audio('sounds/moving-chair.mp3');
+// const s_moving_furn = new Audio('sounds/moving-furniture.mp3');
+// const s_wah = new Audio('sounds/wah.mp3');
 fart.push(new Audio('sounds/fart_0.mp3'));
 fart.push(new Audio('sounds/fart_1.mp3'));
 fart.push(new Audio('sounds/fart_2.mp3'));
 for (let l = 0; l < 12; l++) {
   laugh.push(new Audio('sounds/laugh_' + l + '.mp3'));
 }
-const s_crash = new Audio('sounds/crash-loud-short.mp3');
-const s_ding = new Audio('sounds/ding.mp3');
-const s_end = new Audio('sounds/endgame.mp3');
-const s_glass_break = new Audio('sounds/glass-break-short.mp3');
-const s_glass_deeper = new Audio('sounds/glass-break-deeper.mp3');
-const s_mouth_harp = new Audio('sounds/mouth-harp.mp3');
-const s_moving_chair = new Audio('sounds/moving-chair.mp3');
-const s_moving_furn = new Audio('sounds/moving-furniture.mp3');
+
+const allSounds = [s_boing, s_collision, s_crash, s_crying, s_ding, s_giggle, s_glass_deeper];
+console.log('all sounds', allSounds);
 
 items.forEach((item, i) => {
   itemPositionReference[item.dataset.name] = {
@@ -73,52 +84,43 @@ class baby {
   //-------------- SCORING  ----------------//
 
   addToScore(item) {
-    console.log('enter addToScore()');
     let startDamages = runningScore;
 
     //
     const pause = (time) => {
       return new Promise((resolve) => setTimeout(resolve, time));
     };
+    endDamages += parseInt(item.dataset.cost);
 
-    console.log('startDamages', startDamages, 'runningScore', runningScore);
+    // iterate up to totalDamages by 1 for visual engagement
+    // Looping time delay promise script below by https://javascript.plainenglish.io/javascript-slow-down-for-loop-9d1caaeeeeed
+    let scoreLoop = async () => {
+      let incr = 1;
 
-    // prevent double scoring for same item
-    if (!item.classList.contains('damaged')) {
-      item.classList.add('damaged');
-      endDamages += parseInt(item.dataset.cost);
-      console.log('endDamages', endDamages);
+      if (endDamages - startDamages > 1000) {
+        incr = 5;
+      }
 
-      // iterate up to totalDamages by 1 for visual engagement
-      // Promise script by https://javascript.plainenglish.io/javascript-slow-down-for-loop-9d1caaeeeeed
-      let scoreLoop = async () => {
-        let incr = 1;
+      for (let d = startDamages; d <= endDamages; d += incr) {
+        await pause(1);
+        runningScoreDisplay.textContent = d > item.dataset.cost ? endDamages - incr : d;
+      }
+    };
+    scoreLoop().then(() => {
+      runningScoreDisplay.classList.add('mischief-managed');
+      setTimeout(() => {}, 300);
+      setTimeout(() => {
+        runningScoreDisplay.classList.remove('mischief-managed');
+        s_ding.play();
+      }, 600);
+    });
 
-        if (endDamages - startDamages > 1000) {
-          incr = 5;
-        }
-
-        for (let d = startDamages; d <= endDamages; d += incr) {
-          await pause(1);
-          runningScoreDisplay.textContent = d > item.dataset.cost ? endDamages - incr : d;
-        }
-      };
-
-      scoreLoop().then(() => {
-        runningScoreDisplay.classList.add('mischief-managed');
-        setTimeout(() => {
-          runningScoreDisplay.classList.remove('mischief-managed');
-          s_ding.play();
-        }, 600);
-      });
-
-      runningScore = parseInt(runningScoreDisplay.textContent);
-    }
+    runningScore = parseInt(runningScoreDisplay.textContent);
   }
 
   //--------------  SOUND ACTIONS  ----------------//
 
-  noiseAfterBump() {
+  collisionNoise() {
     s_collision.play();
     s_crash.play();
     s_glass_deeper.play();
@@ -138,23 +140,37 @@ class baby {
 
   //--------------  MOVEMENT AND COLLISSIONS  ----------------//
 
-  bounceBabyBack(item) {
+  currentDirection() {
+    return babyContainer.className.slice(babyContainer.className.indexOf('-') + 1);
+  }
+
+  bounceBabyBack(item, bounceAmount = 40) {
+    if (item.collisions === 1) {
+      return;
+    }
+
     // get the word for current direction, i., right, left, etc.
-    let currentDirection = babyContainer.className.slice(babyContainer.className.indexOf('-') + 1);
     // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
-    let bounceAmount = 40;
+    let currentDirection = babyContainer.className.slice(babyContainer.className.indexOf('-') + 1);
+
+    if (item.collisions === 1) {
+      return;
+    }
 
     function collisionActions() {
       s_collision.play();
       if (item.classList.contains('touched')) {
         babyInstance.giggle();
-        bounceAmount = 60;
       } else {
-        babyInstance.noiseAfterBump();
+        babyInstance.collisionNoise();
       }
     }
+
+    // reset tipping for new collision
     item.classList.remove('tilt-left');
     item.classList.remove('tilt-right');
+
+    // bounce in opposite direction
     switch (currentDirection) {
       case 'left':
         this.tipIt('left', item);
@@ -168,12 +184,12 @@ class baby {
         this.babyPos.right = Math.round(this.babyPos.left - bounceAmount);
         break;
       case 'up':
-        this.tipIt('rand', item);
+        this.tipIt('up', item);
         collisionActions();
         this.babyPos.top = Math.round(this.babyPos.top + bounceAmount);
         break;
       case 'down':
-        this.tipIt('rand', item);
+        this.tipIt('down', item);
         collisionActions();
         this.babyPos.top = Math.round(this.babyPos.top - bounceAmount);
         break;
@@ -193,65 +209,117 @@ class baby {
     return horizontalOverlap && verticalOverlap;
   }
 
-  isTouching() {
-    //const babyRect = babyContainer.getBoundingClientRect();
+  // not yet used
+  collisionActions(item) {
+    s_collision.play();
+    if (item.classList.contains('touched')) {
+      babyInstance.giggle();
+    } else {
+      babyInstance.collisionNoise();
+    }
+  }
 
+  isOffScreen() {
+    const babyRect = babyContainer.getBoundingClientRect();
+    if (babyRect.bottom >= window.innerHeight) {
+      this.babyPos.top -= 40;
+      s_boing.play();
+    }
+    if (babyRect.top <= 0) {
+      this.babyPos.top += 40;
+      s_boing.play();
+    }
+    if (babyRect.left <= 0) {
+      this.babyPos.left += 40;
+      s_boing.play();
+    }
+    if (babyRect.right >= window.innerWidth) {
+      this.babyPos.left -= 40;
+      s_boing.play();
+    }
+  }
+
+  isTouching(originalPosition) {
+    const babyRect = babyContainer.getBoundingClientRect();
     let isColliding = false;
 
     items.forEach((item) => {
-      //const itemRect = item.getBoundingClientRect();
-      //const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
-      //const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
-
       if (this.collisionTest(item)) {
         // if it's colliding, add touched, set isColliding, bounceBabyBack, and addToScore
         item.classList.add('touched');
         isColliding = true;
-        this.bounceBabyBack(item);
-        this.addToScore(item);
+
+        function collisionActions() {
+          s_collision.play();
+          if (item.classList.contains('touched')) {
+            babyInstance.giggle();
+          } else {
+            babyInstance.collisionNoise();
+          }
+        }
+
+        if (item.collisions === undefined) {
+          item.collisions = 1;
+          this.addToScore(item);
+          this.bounceBabyBack(item);
+
+          // remove baby from object towards centerpoint: window.innerHeight/2 window.innerWidth/2
+        } else {
+          item.collisions++;
+
+          this.bounceBabyBack(item);
+        }
 
         if (items.length === document.getElementsByClassName('touched').length) {
           this.endGame();
         }
       }
     });
-
-    // if (!isColliding) {
-    //   //console.log('Baby is not colliding with any item.');
-    // }
   }
 
   move(e) {
     e = e || window.Event;
-    console.log('moving', e.key);
+    // Store the current position as a backup in case of collision
+    const originalPosition = {
+      top: this.babyPos.top,
+      left: this.babyPos.left,
+    };
+
     switch (e.key) {
       // up arrow
       case 'ArrowUp':
-        this.babyPos.top = Math.round(this.babyPos.top - 10);
+        // Check if moving up would stay within the window boundaries
+        this.babyPos.top -= 10;
         this.setDirectionClass('up');
+        this.isOffScreen();
         break;
       // down arrow
       case 'ArrowDown':
-        this.babyPos.top = Math.round(this.babyPos.top + 10);
+        // Check if moving down would stay within the window boundaries
+        this.babyPos.top += 10;
         this.setDirectionClass('down');
+        this.isOffScreen();
         break;
       // left arrow
       case 'ArrowLeft':
-        this.babyPos.left = Math.round(this.babyPos.left - 10);
+        // Check if moving left would stay within the window boundaries
+        this.babyPos.left -= 10;
         this.setDirectionClass('left');
+        this.isOffScreen();
         break;
       // right arrow
       case 'ArrowRight':
-        this.babyPos.left = Math.round(this.babyPos.left) + 10;
+        // Check if moving right would stay within the window boundaries
+        this.babyPos.left += 10;
         this.setDirectionClass('right');
+        this.isOffScreen();
         break;
       default:
-        throw new Error('Something is wrong in the direction switch, user probably pressed not an arrow key. Do nothing. Keypress was:', e.key);
         break;
     }
-    this.babyPos.right = babyContainer.getBoundingClientRect().right;
-    this.babyPos.bottom = babyContainer.getBoundingClientRect().top;
-    this.isTouching();
+
+    // Check for collisions after moving
+    this.isTouching(originalPosition);
   }
 
   //--------------  ORIENTATION  ----------------//
@@ -267,16 +335,20 @@ class baby {
   }
 
   tipIt(dir, item) {
-    if (dir === 'left') {
+    if (dir === 'left' || dir === 'up') {
       item.classList.add('tip-left');
-    } else if (dir === 'right') {
+    } else if (dir === 'right' || dir === 'down') {
       item.classList.add('tip-right');
-    } else {
-      let rand = Math.floor(Math.random() * 2);
-      rand = 0 ? item.classList.add('tip-left') : item.classList.add('tip-right');
     }
+    // Future feature
+    // else {
+    //   let rand = Math.floor(Math.random() * 2);
+    //   rand = 0 ? item.classList.add('tip-left') : item.classList.add('tip-right');
+    // }
     //make sure baby isn't still colliding by moving baby out of item bounds towards center
   }
+
+  //--------------  GAME ACTIONS  ----------------//
 
   startGame() {
     babyName.textContent = inputBabyName.value.toUpperCase() + "'S";
@@ -292,7 +364,6 @@ class baby {
   }
 
   endGame() {
-    console.log('Game Ended');
     modalBG.classList.remove('hide');
     setTimeout(() => {
       modalBG.style.zIndex = 100;
@@ -307,6 +378,7 @@ function liftOff() {
   babyInstance = new baby(inputBabyName.value);
   babyInstance.startGame();
 }
+
 //--------------  EVENT LISTENERS  ----------------//
 
 window.addEventListener('keydown', (e) => {
@@ -322,7 +394,6 @@ inputBabyName.addEventListener('keyup', () => {
 });
 
 inputBabyName.addEventListener('keypress', (e) => {
-  console.log('e.key', e.key, e.key.match(startRegex) !== null);
   if (e.key.match(startRegex) !== null) {
     liftOff();
   }
@@ -335,6 +406,11 @@ startButton.addEventListener('click', () => {
 babyContainer.addEventListener('click', () => {
   babyInstance.endGame();
 });
+
+volumeControl.addEventListener('change', () => {
+  setVolume();
+});
+
 //--------------  RANDOM NOISES  ----------------//
 
 // set a random timeout
@@ -345,8 +421,20 @@ function soundPause() {
   return delayTime;
 }
 
+// with a little help from Leith
+function setVolume() {
+  const vol = volumeControl.value;
+  allSounds.forEach((s) => {
+    s.volume = vol / 100;
+  });
+  fart.forEach((f) => {
+    f.volume = vol / 100;
+  });
+  laugh.forEach((l) => {
+    l.volume = vol / 100;
+  });
+}
 function makeNoises() {
-  console.log('make noises');
   let laughOrFart = Math.floor(Math.random() * 10);
   if (laughOrFart === 0) {
     // fart
@@ -358,9 +446,11 @@ function makeNoises() {
   }
 }
 
-// (function noiseLoop() {
-//   setTimeout(() => {
-//     makeNoises();
-//     noiseLoop();
-//   }, soundPause());
-// })();
+(function noiseLoop() {
+  setTimeout(() => {
+    makeNoises();
+    noiseLoop();
+  }, soundPause());
+})();
+
+setVolume();

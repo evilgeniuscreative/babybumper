@@ -129,15 +129,15 @@ body {
 
 main {
   background: #faf0d6;
-  padding: 0;
-  margin: 0;
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  right: 0;
   bottom: 0;
+  height: 100vh;
   left: 0;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100vw;
   z-index: 0;
 }
 
@@ -164,43 +164,43 @@ p {
 }
 
 .floor-crease {
-  height: 2px;
-  width: 100%;
   color: #271c02;
+  height: 2px;
+  left: 0;
   position: absolute;
   top: 45%;
-  left: 0;
+  width: 100%;
   z-index: 1;
 }
 
 .left-crease {
-  height: 45%;
-  width: 2px;
   color: #271c02;
+  height: 45%;
+  left: 20%;
   position: absolute;
   top: 0;
-  left: 20%;
+  width: 2px;
   z-index: 1;
 }
 
 .right-crease {
-  height: 45%;
-  width: 2px;
   color: #271c02;
+  height: 45%;
+  left: 20%;
   position: absolute;
   top: 1;
-  left: 20%;
+  width: 2px;
   z-index: 0;
 }
 
 #baby {
-  height: 192px;
-  width: 244px;
-  position: absolute;
   bottom: 0px;
+  height: 192px;
   left: 42%;
-  z-index: 100;
+  position: absolute;
   transition: all 0.3s;
+  width: 244px;
+  z-index: 100;
 }
 #baby.going-right img {
   transform: scaleX(1);
@@ -236,7 +236,8 @@ p {
   left: 0;
   width: 100%;
   height: 100vh;
-  position: absolute;
+  position: fixed;
+  top: 0;
   z-index: 100;
 }
 
@@ -307,16 +308,16 @@ p {
 
 #scoreboard {
   background-color: rgba(83, 40, 20, 0.7);
+  border-radius: 8px;
   color: white;
   display: flex;
-  justify-content: space-between;
-  position: absolute;
   height: 30px;
-  width: 200px;
+  justify-content: space-between;
   padding: 15px;
-  border-radius: 8px;
+  position: absolute;
+  right: 30px;
   top: 10px;
-  right: 40px;
+  width: 200px;
   z-index: 99;
 }
 
@@ -325,8 +326,8 @@ p {
 }
 
 #damages {
-  font-size: 30px;
   align-self: center;
+  font-size: 30px;
   transition: all 0.3s;
 }
 
@@ -338,9 +339,9 @@ p {
 #rug {
   bottom: 0px;
   left: 50%;
-  width: 600px;
   margin: 0 auto;
   transform: translate(-50%, -50%);
+  width: 600px;
 }
 #rug img {
   width: 100%;
@@ -401,4 +402,33 @@ p {
 .gone {
   display: none;
   transition: all 1s;
+}
+
+#vol {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  opacity: 0.2;
+  padding: 5px 10px;
+  width: 200px;
+  height: 25px;
+  top: 10px;
+  left: 15px;
+  z-index: 2000;
+  transition: all 0.3s;
+}
+#vol label {
+  left: 15px;
+  position: absolute;
+  top: 4px;
+}
+#vol input {
+  cursor: pointer;
+  left: 70px;
+  position: absolute;
+  top: 7px;
+}
+#vol:hover {
+  opacity: 1;
+  transition: all 0.3s;
 }

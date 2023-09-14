@@ -42,26 +42,30 @@ main {
 }
 
 #baby {
-  border: 1px solid grey;
+  border: 2px solid red;
+  border-top-color: turquoise;
+  border-bottom-color: blue;
+  border-left-color: lavenderblush;
+  boder-right-color: red;
   height: 192px;
   width: 244px;
   position: absolute;
   z-index: 100;
   transition: all 0.3s;
 }
-#baby.going-right {
+#baby.going-right img {
   transform: scaleX(1);
   transition: all 0.3s;
 }
-#baby.going-left {
+#baby.going-left img {
   transform: scaleX(-1);
   transition: all 0.3s;
 }
-#baby.going-up {
+#baby.going-up img {
   transform: rotate(-90deg);
   transition: all 0.3s;
 }
-#baby.going-down {
+#baby.going-down img {
   transform: rotate(90deg);
   transition: all 0.3s;
 }
@@ -84,8 +88,8 @@ main {
 }
 
 #baby {
-  bottom: 15%;
-  left: 41.5%;
+  bottom: 10%;
+  left: 42%;
 }
 
 #sofa {

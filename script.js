@@ -31,16 +31,16 @@ console.log( 'locations', objLocationMap );
 class baby {
     constructor( name ) {
         this.name = name;
-        this.babyPosition = {top: babyIcon.offsetTop, left: babyIcon.offsetLeft};
+        this.babyPos = {top: babyIcon.offsetTop, left: babyIcon.offsetLeft};
     }
 
     setDirectionClass( direction ) {
         babyIcon.className = '';
         babyIcon.classList.add( 'going-' + direction );
         if ( direction === 'up' || direction === 'down' ) {
-            babyIcon.style.top = this.babyPosition.top.toString() + 'px';
+            babyIcon.style.top = this.babyPos.top.toString() + 'px';
         } else if ( direction === 'left' || direction === 'right' ) {
-            babyIcon.style.left = this.babyPosition.left.toString() + 'px';
+            babyIcon.style.left = this.babyPos.left.toString() + 'px';
         }
     }
 
@@ -50,30 +50,30 @@ class baby {
         switch ( e.key ) {
             // up arrow
             case 'ArrowUp':
-                this.babyPosition.top = Math.ceil( this.babyPosition.top ) - 10;
+                this.babyPos.top = Math.round( this.babyPos.top - 10 );
                 this.setDirectionClass( 'up' );
                 break;
             // down arrow
             case 'ArrowDown':
-                this.babyPosition.top = Math.floor( this.babyPosition.top ) + 10;
+                this.babyPos.top = Math.round( this.babyPos.top + 10 );
                 this.setDirectionClass( 'down' );
                 break;
             // left arrow
             case 'ArrowLeft':
-                this.babyPosition.left = Math.floor( this.babyPosition.left ) - 10;
+                this.babyPos.left = Math.round( this.babyPos.left - 10 );
                 this.setDirectionClass( 'left' );
                 break;
             // right arrow
             case 'ArrowRight':
-                this.babyPosition.left = Math.floor( this.babyPosition.left ) + 10;
+                this.babyPos.left = Math.round( this.babyPos.left ) + 10;
                 this.setDirectionClass( 'right' );
                 break;
             default:
                 console.log( 'something is wrong in the direction switch. Keypress was:', e.key );
                 break;
         }
-        this.babyPosition.right = babyIcon.getBoundingClientRect().right;
-        this.babyPosition.bottom = babyIcon.getBoundingClientRect().bottom;
+        this.babyPos.right = babyIcon.getBoundingClientRect().right;
+        this.babyPos.bottom = babyIcon.getBoundingClientRect().bottom;
         this.isTouching();
     }
 
@@ -84,27 +84,21 @@ class baby {
         let verticalTouch = false;
         let horizontalTouch = false;
         Object.entries( objLocationMap ).forEach( ( entry ) => {
-            const [key, coord] = entry;
-            console.log( 'NAME:', key, 'COORD:', coord );
-            console.log( 'babyPosition', this.babyPosition );
-            console.log( `baby.bottom >= ${key}.top:`, this.babyPosition.bottom >= coord['top'] );
-            console.log( `baby.top <= ${key}.bottom:`, this.babyPosition.top <= coord['bottom'] );
-            console.log( `baby.right >= ${key}.left:`, this.babyPosition.bottom >= coord['left'] );
-            console.log( `baby.left <= ${key}.right:`, this.babyPosition.bottom >= coord['top'] );
-            // vertical touch
-            if ( key === 'top' || key == 'bottom' ) {
-                if ( this.babyPosition.bottom >= coord['top'] && this.babyPosition.top <= coord['bottom'] ) {
-                    console.log( 'vertical touch' );
-                    verticalTouch = true;
-                }
-            }
-            //  horizontal touch
-            if ( key === 'left' || key == 'right' ) {
-                if ( this.babyPosition.right >= coord['left'] && this.babyPosition.left <= coord['right'] ) {
-                    console.log( 'vertical touch' );
-                    horizontalTouch = true;
-                }
-            }
+            const [itemName, itemPos] = entry;
+            console.log( 'NAME:', itemName, 'COORD:', itemPos );
+            console.log( 'babyPosition', this.babyPos );
+
+// if it's in-between the item top and bottom AND in-between item's left and right, it's touching
+            // top 0 => top 1000
+            // left 0 => left 1000
+
+            const hTouch = this.babyPos.right >= itemPos.left || this.babyPos.left <= itemPos.right; // horizontal plane match
+            const vTouch = this.babyPos.top <= itemPos.bottom || this.babyPos.bottom >= itemPos.top; // vertical plane match
+
+
+            console.log( 'vTouch:', vTouch, 'hTouch', hTouch );
+            console.log( 'isTouching:', vTouch && hTouch );
+
         } );
 
         if ( horizontalTouch || verticalTouch ) {
@@ -113,7 +107,9 @@ class baby {
     }
 }
 
+
 const screenBaby = new baby( 'Toby' );
+
 
 babyIcon.addEventListener( 'click', () => {
     console.log( 'Baby clicked' );
@@ -122,3 +118,8 @@ babyIcon.addEventListener( 'click', () => {
 window.addEventListener( 'keydown', ( e ) => {
     screenBaby.move( e );
 } );
+
+
+;
+window.screen.height
+

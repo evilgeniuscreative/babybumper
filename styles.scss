@@ -6,6 +6,7 @@ $shadow: #949876;
 .paresh {
   display: block;
 }
+
 @keyframes tip-over-left {
   0% {
   }
@@ -52,29 +53,33 @@ main {
 }
 
 #baby {
-  border: 1px solid grey;
+  border: 2px solid red;
+  border-top-color: turquoise;
+  border-bottom-color: blue;
+  border-left-color: lavenderblush;
+  boder-right-color: red;
   height: 192px;
   width: 244px;
   position: absolute;
   z-index: 100;
   transition: all 0.3s;
 
-  &.going-right {
+  &.going-right img {
     transform: scaleX(1);
     transition: all 0.3s;
   }
 
-  &.going-left {
+  &.going-left img {
     transform: scaleX(-1);
     transition: all 0.3s;
   }
 
-  &.going-up {
+  &.going-up img {
     transform: rotate(-90deg);
     transition: all 0.3s;
   }
 
-  &.going-down {
+  &.going-down img {
     transform: rotate(90deg);
     transition: all 0.3s;
   }
@@ -98,8 +103,8 @@ main {
 }
 
 #baby {
-  bottom: 15%;
-  left: 41.5%;
+  bottom: round(10%);
+  left: round(41.5%);
 }
 
 #sofa {

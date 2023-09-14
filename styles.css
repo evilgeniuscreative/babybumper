@@ -20,12 +20,17 @@ body {
   font-family: Oswald, sans-serif;
   font-weight: 300;
   position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 main {
   background: #faf0d6;
+  padding: 0;
+  margin: 0;
   position: fixed;
-  height: 100%;
+  height: 100vh;
   width: 100vw;
   top: 0;
   right: 0;
@@ -34,12 +39,8 @@ main {
   z-index: 0;
 }
 
-.somchange {
-  margin: 0;
-  display: block;
-}
-
 .item {
+  border: 1px solid grey;
   position: absolute;
   z-index: 1;
 }
@@ -48,6 +49,8 @@ main {
   height: 192px;
   width: 244px;
   position: absolute;
+  bottom: 10%;
+  left: 42%;
   z-index: 100;
   transition: all 0.3s;
 }
@@ -73,6 +76,33 @@ main {
   z-index: 0;
 }
 
+#scoreboard {
+  background-color: rgba(83, 40, 20, 0.7);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  height: 30px;
+  width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  top: 20px;
+  right: 20px;
+  z-index: 99999;
+}
+#scoreboard .title {
+  align-self: flex-start;
+}
+#scoreboard #score {
+  align-self: center;
+  font-size: 30px;
+}
+
+#cabinet {
+  left: 80%;
+  top: 50%;
+}
+
 #rug {
   bottom: 0%;
   left: 50%;
@@ -84,40 +114,24 @@ main {
   width: 100%;
 }
 
-#scoreboard {
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  position: fixed;
-  height: 30px;
-  width: 200px;
-  padding: 10px;
-  border-radius: 8px;
-  top: 20px;
-  right: 20px;
-  background-color: rgba(83, 40, 20, 0.7);
-}
-#scoreboard .title {
-  align-self: flex-start;
-}
-#scoreboard #score {
-  align-self: center;
-  font-size: 30px;
-}
-
-#baby {
-  bottom: 10%;
-  left: 42%;
-}
-
 #sofa {
   top: 10%;
   left: 38%;
 }
 
+#smallbookshelf {
+  left: 75%;
+  top: 4%;
+}
+
 #stool {
   top: 45%;
   left: 20%;
+}
+
+#twincabinet {
+  left: 5%;
+  top: 5%;
 }
 
 .tip-right {

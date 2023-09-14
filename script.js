@@ -11,6 +11,8 @@ const enterBabyName = document.getElementById('enterBabyName');
 const startButton = document.getElementById('start');
 const modal = document.getElementById('modalBG');
 const babyName = document.getElementById('babyName');
+const scorekeeper = document.getElementById('score');
+let screenBaby;
 let gameRunning = false;
 let score = 0;
 // baby image is 244 x 192
@@ -28,7 +30,7 @@ const s_boing = new Audio('sounds/boing.mp3');
 const s_collision = new Audio('sounds/collision.mp3');
 const s_wah = new Audio('sounds/wah.mp3');
 const s_crying = new Audio('sounds/crying.mp3');
-const s_giggle = new Audio('sounds/giggle.mp3');
+const s_giggle = new Audio('sounds/laugh_0.mp3');
 fart.push(new Audio('sounds/fart_0.mp3'));
 fart.push(new Audio('sounds/fart_1.mp3'));
 fart.push(new Audio('sounds/fart_2.mp3'));
@@ -68,8 +70,10 @@ class baby {
   }
 
   addToScore(item) {
-    console.log(item.dataset.score);
-    score += item.dataset.score;
+    console.log('add to score:');
+    console.log(item.dataset.cost);
+    score += parseInt(item.dataset.cost);
+    scorekeeper.textContent = score;
   }
 
   bounceBabyBack(item) {
@@ -138,10 +142,13 @@ class baby {
     }, 100);
     setTimeout(() => {
       document.getElementById('babyImg').src = 'img/baby.webp';
-      s_laugh.play();
+      laugh[1].play();
     }, 4300);
   }
 
+  giggle() {
+    laugh[0].play();
+  }
   isTouching() {
     const babyRect = babyIcon.getBoundingClientRect();
 
@@ -158,6 +165,7 @@ class baby {
         isColliding = true;
         this.bounceBabyBack(item);
         item.classList.add('touched');
+        this.addToScore(item);
       }
     });
 
@@ -233,8 +241,9 @@ enterBabyName.addEventListener('keyup', () => {
     startButton.disabled = false;
   }
 });
+
 startButton.addEventListener('click', () => {
-  const screenBaby = new baby(enterBabyName.value);
+  screenBaby = new baby(enterBabyName.value);
   babyName.textContent = enterBabyName.value.toUpperCase() + "'S";
   gameRunning = true;
   modal.classList.add('hide');

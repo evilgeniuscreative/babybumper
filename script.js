@@ -8,26 +8,7 @@
  *
  *
  */
-const items = document.querySelectorAll( '.item' );
-const babyIcon = document.getElementById( 'baby' );
-const sofa = document.getElementById( 'sofa' );
-const objLocationMap = {};
-console.log( 'items', items );
-items.forEach( ( item, i ) => {
-    console.log( 'item', i, item.dataset.name );
 
-    item.addEventListener( 'click', function () {
-        this.classList.toggle( 'tip-left' );
-    } );
-
-    objLocationMap[item.dataset.name] = {
-        top   : Math.round( item.getBoundingClientRect().top ),
-        bottom: Math.round( item.getBoundingClientRect().bottom ),
-        left  : Math.round( item.getBoundingClientRect().left ),
-        right : Math.round( item.getBoundingClientRect().right ),
-    };
-} );
-console.log( 'locations', objLocationMap );
 
 class baby {
     constructor( name ) {
@@ -35,13 +16,6 @@ class baby {
         this.babyPosX = 50;
         this.babyPosY = 350;
         this.moveSpeed = 10;
-
-        // this.babyPos = {
-        //     top   : Math.round( babyIcon.getBoundingClientRect().top ),
-        //     bottom: Math.round( babyIcon.getBoundingClientRect().bottom ),
-        //     left  : Math.round( babyIcon.getBoundingClientRect().left ),
-        //     right : Math.round( babyIcon.getBoundingClientRect().right ),
-        // };
     }
 
     setDirectionClass( direction ) {
@@ -121,11 +95,34 @@ class baby {
     }
 }
 
+document.addEventListener( 'DOMContentLoaded', () => {
+    const items = document.querySelectorAll( '.item' );
+    const babyIcon = document.getElementById( 'baby' );
+    const sofa = document.getElementById( 'sofa' );
+    const objLocationMap = {};
+    console.log( 'items', items );
+    items.forEach( ( item, i ) => {
+        console.log( 'item', i, item.dataset.name );
 
-const screenBaby = new baby( 'Toby' );
+        item.addEventListener( 'click', function () {
+            this.classList.toggle( 'tip-left' );
+        } );
 
-window.addEventListener( 'keydown', ( e ) => {
-    screenBaby.move( e );
+        objLocationMap[item.dataset.name] = {
+            top   : Math.round( item.getBoundingClientRect().top ),
+            bottom: Math.round( item.getBoundingClientRect().bottom ),
+            left  : Math.round( item.getBoundingClientRect().left ),
+            right : Math.round( item.getBoundingClientRect().right ),
+        };
+    } );
+    console.log( 'locations', objLocationMap );
+
+    const screenBaby = new baby( 'Toby' );
+
+    window.addEventListener( 'keydown', ( e ) => {
+        screenBaby.move( e );
+    } );
+
+    screenBaby.update();
+
 } );
-
-

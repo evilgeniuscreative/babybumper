@@ -1,9 +1,3 @@
-// TODO:
-// 1. modalBG space at top
-// 2. right sidebar?
-// 3. LR creases not showing
-// 4. Victory laughing
-
 // Variables
 $red-main: #ef5735;
 $tan-main: #faf0d6;
@@ -230,36 +224,6 @@ p {
   position: absolute;
   z-index: 5;
 }
-
-// For future styling
-// .floor-crease {
-//   color: #271c02;
-//   height: 2px;
-//   left: 0;
-//   position: absolute;
-//   top: 45%;
-//   width: 100%;
-//   z-index: 1;
-// }
-
-// .left-crease {
-//   color: #271c02;
-//   height: 45%;
-//   left: 20%;
-//   position: absolute;
-//   top: 0;
-//   width: 2px;
-//   z-index: 1;
-// }
-// .right-crease {
-//   color: #271c02;
-//   height: 45%;
-//   left: 20%;
-//   position: absolute;
-//   top: 1;
-//   width: 2px;
-//   z-index: 0;
-// }
 
 #baby {
   bottom: 0px;

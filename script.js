@@ -7,23 +7,36 @@ ScriptProcessorNode;
  */
 const items = document.querySelectorAll('.item');
 const babyIcon = document.getElementById('baby');
+const enterBabyName = document.getElementById('enterBabyName');
+const startButton = document.getElementById('start');
+const modal = document.getElementById('modalBG');
+const babyName = document.getElementById('babyName');
+let gameRunning = false;
 let score = 0;
+// baby image is 244 x 192
+//console.log('innerHeight', window.innerHeight, 'innerWidth', window.innerWidth);
 
 // set baby starting position
-babyIcon.style.top = 400 + 'px';
-babyIcon.style.left = 700 + 'px';
+babyIcon.style.top = window.innerHeight - 325 + 'px';
+babyIcon.style.left = window.innerWidth / 2 - 150 + 'px';
 const itemReference = {};
 
 // SOUNDS
+const fart = [];
+const laugh = [];
 const s_boing = new Audio('sounds/boing.mp3');
 const s_collision = new Audio('sounds/collision.mp3');
 const s_wah = new Audio('sounds/wah.mp3');
 const s_crying = new Audio('sounds/crying.mp3');
 const s_giggle = new Audio('sounds/giggle.mp3');
-const s_laugh = new Audio('sounds/laugh.mp3');
-const s_fart_1 = new Audio('sounds/fartS.mp3');
-const s_fart_2 = new Audio('sounds/fartM.mp3');
-const s_fart_3 = new Audio('sounds/fartL.mp3');
+fart.push(new Audio('sounds/fart_0.mp3'));
+fart.push(new Audio('sounds/fart_1.mp3'));
+fart.push(new Audio('sounds/fart_2.mp3'));
+console.log(fart);
+for (let l = 0; l < 12; l++) {
+  laugh.push(new Audio('sounds/laugh_' + l + '.mp3'));
+}
+console.log(laugh);
 const s_crash = new Audio('sounds/crash-loud-short.mp3');
 const s_end = new Audio('sounds/endgame.mp3');
 const s_glass_break = new Audio('sounds/glass-break-short.mp3');
@@ -113,19 +126,6 @@ class baby {
         throw new Error("Oops, there's a bounceback issue. Can't tell where he's coming from.");
         break;
     }
-    let timeDelay = Math.floor(Math.random() * 15000) + 1000;
-    setTimeout(() => {
-      let randomFart = Math.floor(Math.random() * 12);
-      if (randomFart === 2) {
-        s_fart_1.play();
-      } else if (randomFart === 5) {
-        s_fart_2.play();
-      }
-      if (randomFart === 9) {
-        s_fart_3.play();
-      }
-    }, timeDelay);
-
     this.babyPos.right = babyIcon.getBoundingClientRect().right;
     this.babyPos.bottom = babyIcon.getBoundingClientRect().bottom;
   }
@@ -222,26 +222,47 @@ class baby {
   }
 }
 
-const screenBaby = new baby('Toby');
-
-babyIcon.addEventListener('click', () => {
-  console.log('Baby clicked');
+window.addEventListener('keydown', (e) => {
+  if (gameRunning) {
+    screenBaby.move(e);
+  }
 });
 
-window.addEventListener('keydown', (e) => {
-  screenBaby.move(e);
+enterBabyName.addEventListener('keyup', () => {
+  if (enterBabyName.value.length > 1) {
+    startButton.disabled = false;
+  }
+});
+startButton.addEventListener('click', () => {
+  const screenBaby = new baby(enterBabyName.value);
+  babyName.textContent = enterBabyName.value.toUpperCase() + "'S";
+  gameRunning = true;
+  modal.classList.add('hide');
+  setTimeout(() => {
+    modal.style.zIndex = -10;
+  }, 505);
 });
 
 let iterations = 1;
 (function gig(iterations) {
-  console.log('iterations');
   iterations += 1;
-  if (iterations <= 6) {
-    let giggleTime = Math.floor(Math.random() * 60000 + 10000);
-    console.log('giggleTime', giggleTime);
+  if (iterations <= 50) {
+    // TODO: need to create a minimum time between noises
+    let soundPause = Math.floor(Math.random() * 200000 + 14000);
+    console.log('soundPause', soundPause);
     setTimeout(() => {
-      giggleTime > 15000 ? s_giggle.play() : s_laugh.play();
-    }, giggleTime);
+      let laughOrFart = Math.floor(Math.random() * 10);
+      if (laughOrFart === 0) {
+        // fart
+        let fartNum = Math.floor(Math.random() * 3);
+        console.log(fart[fartNum]);
+        fart[fartNum].play();
+      } else {
+        let laughNum = Math.floor(Math.random() * 10);
+        console.log(laugh[laughNum]);
+        laugh[laughNum].play();
+      }
+    }, soundPause);
     gig(iterations);
   }
 })(iterations);

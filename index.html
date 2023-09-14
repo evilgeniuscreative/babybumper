@@ -4,14 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script defer src="script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <title>Baby Bumper Game</title>
   </head>
   <body>
+    <section id="modalBG">
+      <article id="modal">
+        <h1>Baby Bumper!</h1>
+        <p>What's your baby's name?</p>
+        <input type="text" id="enterBabyName" />
+        <button id="start" disabled="disabled">Let's Go!</button>
+      </article>
+    </section>
     <main>
       <section id="scoreboard">
-        <span class="title">SCORE</span>
-        <span id="score">0000</span>
+        <div id="scoreTitle">
+          <div id="babyName"></div>
+          <div>SCORE</div>
+        </div>
+        <div id="score">0000</div>
       </section>
       <section id="livingRoom">
         <figure id="baby" data-name="baby">
@@ -33,7 +47,7 @@
           <img src="img/cabinet.webp" alt="Cabinet" />
         </figure>
         <figure id="rug" class="scenery" data-name="rug" data-cost="2200">
-          <img src="img/polar-bear-rug.webp" alt="" />
+          <img src="img/abstract_rug.webp" alt="Abstract mid century rug" />
         </figure>
       </section>
     </main>

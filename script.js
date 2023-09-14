@@ -86,6 +86,11 @@ class baby {
 
   addToScore() {}
 
+  stopBaby() {
+    let babyDirection = babyIcon.className;
+    switch n  
+  }
+
   isTouching() {
     const babyRect = babyIcon.getBoundingClientRect();
 
@@ -100,6 +105,7 @@ class baby {
       if (horizontalOverlap && verticalOverlap) {
         console.log('😳 👼🏻  Baby is colliding with item:', item.dataset.name);
         isColliding = true;
+        this.stopBaby();
       }
     });
 

@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Oswald";
+  src: url("fonts/oswald-variablefont_wght-webfont.woff2") format("woff2"), url("fonts/oswald-variablefont_wght-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 @keyframes tip-over-left {
   100% {
     transform: rotate(-90deg);
@@ -11,6 +17,8 @@
   }
 }
 body {
+  font-family: Oswald, sans-serif;
+  font-weight: 300;
   position: relative;
 }
 
@@ -72,9 +80,29 @@ main {
   margin: 0 auto;
   transform: translate(-50%, -50%);
 }
-
 #rug img {
   width: 100%;
+}
+
+#scoreboard {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  height: 30px;
+  width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(83, 40, 20, 0.7);
+}
+#scoreboard .title {
+  align-self: flex-start;
+}
+#scoreboard #score {
+  align-self: center;
+  font-size: 30px;
 }
 
 #baby {

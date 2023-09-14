@@ -7,6 +7,12 @@
 const items = document.querySelectorAll('.item');
 const babyIcon = document.getElementById('baby');
 const objLocationMap = {};
+const opposites = {
+  left: 'right',
+  right: 'left',
+  top: 'bottom',
+  bottom: 'top',
+};
 
 // SOUNDS
 const s_boing = new Audio('sounds/boing.mp3');
@@ -87,8 +93,30 @@ class baby {
   addToScore() {}
 
   stopBaby() {
-    let babyDirection = babyIcon.className;
-    switch n  
+    // get the word for current direction, i., right, left, etc.
+    let currentDir = babyIcon.className.slice(babyIcon.className.indexOf('-') + 1);
+    console.log('Stop Baby:');
+    console.log('currentDir', currentDir);
+
+    // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+    switch (currentDir) {
+      case 'left':
+        break;
+    }
+    if (currentDir === 'left' || currentDir === 'right') {
+      if (currentDir === 'left') {
+      } else {
+      }
+      this.babyPos.left = Math.round(this.babyPos[opposites[currentDir]] + 10);
+    } else if (currentDir === 'up' || currentDir === 'down') {
+    }
+    // this.babyPos[opposites[currentDir]]=
+    // 1. get the (going-)right direction from class -- OK
+    // 2. bounce him in the opposite direction 10px, top or left, +/-
+    // 3. make a noise
+    // 4. crash the object
+    // 5. make a noise
+    // each time he impacts the object after the first time, rerun 1-3
   }
 
   isTouching() {

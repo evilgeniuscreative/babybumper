@@ -8,6 +8,17 @@ const items = document.querySelectorAll('.item');
 const babyIcon = document.getElementById('baby');
 const objLocationMap = {};
 
+// SOUNDS
+const s_boing = new Audio('sounds/boing.mp3');
+const s_bonk_deep = new Audio('sounds/bonk-deep.mp3');
+const s_crash = new Audio('sounds/crash-loud-short.mp3');
+const s_end = new Audio('sounds/endgame.mp3');
+const s_glass_break = new Audio('sounds/glass-break-short.mp3');
+const s_glass_deeper = new Audio('sounds/glass-break-deeper.mp3');
+const s_mouth_harp = new Audio('sounds/mouth-harp.mp3');
+const s_moving_chair = new Audio('sounds/moving-chair.mp3');
+const s_moving_furn = new Audio('sounds/moving-furniture.mp3');
+
 items.forEach((item, i) => {
   item.addEventListener('click', function () {
     this.classList.toggle('tip-left');
@@ -87,7 +98,7 @@ class baby {
       const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
       if (horizontalOverlap && verticalOverlap) {
-        console.log('Baby is colliding with item:', item.dataset.name);
+        console.log('😳 👼🏻  Baby is colliding with item:', item.dataset.name);
         isColliding = true;
       }
     });

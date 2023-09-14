@@ -45,7 +45,6 @@ main {
 }
 
 .item {
-  border: 1px solid grey;
   position: absolute;
   z-index: 1;
 }

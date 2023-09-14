@@ -16,7 +16,6 @@ let screenBaby;
 let gameRunning = false;
 let score = 0;
 // baby image is 244 x 192
-//console.log('innerHeight', window.innerHeight, 'innerWidth', window.innerWidth);
 
 // set baby starting position
 babyIcon.style.top = window.innerHeight - 325 + 'px';
@@ -34,11 +33,9 @@ const s_giggle = new Audio('sounds/laugh_0.mp3');
 fart.push(new Audio('sounds/fart_0.mp3'));
 fart.push(new Audio('sounds/fart_1.mp3'));
 fart.push(new Audio('sounds/fart_2.mp3'));
-console.log(fart);
 for (let l = 0; l < 12; l++) {
   laugh.push(new Audio('sounds/laugh_' + l + '.mp3'));
 }
-console.log(laugh);
 const s_crash = new Audio('sounds/crash-loud-short.mp3');
 const s_end = new Audio('sounds/endgame.mp3');
 const s_glass_break = new Audio('sounds/glass-break-short.mp3');
@@ -48,10 +45,6 @@ const s_moving_chair = new Audio('sounds/moving-chair.mp3');
 const s_moving_furn = new Audio('sounds/moving-furniture.mp3');
 
 items.forEach((item, i) => {
-  item.addEventListener('click', function () {
-    this.classList.toggle('tip-left');
-  });
-
   itemReference[item.dataset.name] = {
     top: Math.round(item.getBoundingClientRect().top),
     bottom: Math.round(item.getBoundingClientRect().bottom),
@@ -61,7 +54,6 @@ items.forEach((item, i) => {
     height: Math.round(item.getBoundingClientRect().height),
   };
 });
-console.log('locations', itemReference);
 
 class baby {
   constructor(name) {
@@ -70,10 +62,11 @@ class baby {
   }
 
   addToScore(item) {
-    console.log('add to score:');
-    console.log(item.dataset.cost);
-    score += parseInt(item.dataset.cost);
-    scorekeeper.textContent = score;
+    // prevent double scoring for same item
+    if (!item.classList.contains('touched')) {
+      score += parseInt(item.dataset.cost);
+      scorekeeper.textContent = score;
+    }
   }
 
   bounceBabyBack(item) {
@@ -136,7 +129,6 @@ class baby {
 
   cry() {
     setTimeout(() => {
-      console.log('enter cry');
       document.getElementById('babyImg').src = 'img/baby-cry.webp';
       s_crying.play();
     }, 100);
@@ -161,7 +153,6 @@ class baby {
       const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
       if (horizontalOverlap && verticalOverlap) {
-        console.log('😳 👼🏻  Baby is colliding with item:', item.dataset.name);
         isColliding = true;
         this.bounceBabyBack(item);
         item.classList.add('touched');
@@ -258,17 +249,14 @@ let iterations = 1;
   if (iterations <= 50) {
     // TODO: need to create a minimum time between noises
     let soundPause = Math.floor(Math.random() * 200000 + 14000);
-    console.log('soundPause', soundPause);
     setTimeout(() => {
       let laughOrFart = Math.floor(Math.random() * 10);
       if (laughOrFart === 0) {
         // fart
         let fartNum = Math.floor(Math.random() * 3);
-        console.log(fart[fartNum]);
         fart[fartNum].play();
       } else {
         let laughNum = Math.floor(Math.random() * 10);
-        console.log(laugh[laughNum]);
         laugh[laughNum].play();
       }
     }, soundPause);

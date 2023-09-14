@@ -20,10 +20,13 @@ items.forEach( ( item, i ) => {
     } );
 
     objLocationMap[item.dataset.name] = {
-        top   : Math.ceil( item.getBoundingClientRect().top ),
-        bottom: Math.floor( item.getBoundingClientRect().bottom ),
-        left  : Math.floor( item.getBoundingClientRect().left ),
-        right : Math.floor( item.getBoundingClientRect().right ),
+        top   : Math.round( item.getBoundingClientRect().top ),
+        bottom: Math.round( item.getBoundingClientRect().bottom ),
+        left  : Math.round( item.getBoundingClientRect().left ),
+        right : Math.round( item.getBoundingClientRect().right ),
+        height: Math.round( item.getBoundingClientRect().height ),
+        width : Math.round( item.getBoundingClientRect().width ),
+
     };
 } );
 console.log( 'locations', objLocationMap );
@@ -81,28 +84,24 @@ class baby {
     }
 
     isTouching() {
-        let verticalTouch = false;
-        let horizontalTouch = false;
-        Object.entries( objLocationMap ).forEach( ( entry ) => {
-            const [itemName, itemPos] = entry;
-            console.log( 'NAME:', itemName, 'COORD:', itemPos );
-            console.log( 'babyPosition', this.babyPos );
+        const babyRect = babyIcon.getBoundingClientRect();
 
-// if it's in-between the item top and bottom AND in-between item's left and right, it's touching
-            // top 0 => top 1000
-            // left 0 => left 1000
+        let isColliding = false;
 
-            const hTouch = this.babyPos.right >= itemPos.left || this.babyPos.left <= itemPos.right; // horizontal plane match
-            const vTouch = this.babyPos.top <= itemPos.bottom || this.babyPos.bottom >= itemPos.top; // vertical plane match
+        items.forEach( ( item ) => {
+            const itemRect = item.getBoundingClientRect();
 
+            const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
+            const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
-            console.log( 'vTouch:', vTouch, 'hTouch', hTouch );
-            console.log( 'isTouching:', vTouch && hTouch );
-
+            if ( horizontalOverlap && verticalOverlap ) {
+                console.log( 'Baby is colliding with item:', item.dataset.name );
+                isColliding = true;
+            }
         } );
 
-        if ( horizontalTouch || verticalTouch ) {
-            // Elements are touching each other
+        if ( !isColliding ) {
+            console.log( 'Baby is not colliding with any item.' );
         }
     }
 }

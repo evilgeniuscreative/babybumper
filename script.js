@@ -327,6 +327,9 @@ startButton.addEventListener('click', () => {
   liftOff();
 });
 
+babyContainer.addEventListener('click', () => {
+  babyInstance.endGame();
+});
 //--------------  RANDOM NOISES  ----------------//
 
 // set a random timeout

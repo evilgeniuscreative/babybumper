@@ -1,3 +1,9 @@
+// TODO:
+// 1. modalBG space at top
+// 2. right sidebar?
+// 3. LR creases not showing
+// 4. Victory laughing
+
 // Variables
 $red-main: #ef5735;
 $tan-main: #faf0d6;
@@ -27,7 +33,7 @@ $shadow: #949876;
     background-color: rgba(0, 0, 0, 0.85);
   }
   50% {
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.95);
   }
   100% {
     background-color: rgba(0, 0, 0, 0.85);
@@ -178,7 +184,36 @@ p {
 
 .item {
   position: absolute;
+  z-index: 5;
+}
+
+.floor-crease {
+  height: 2px;
+  width: 100%;
+  color: #271c02;
+  position: absolute;
+  top: 45%;
+  left: 0;
   z-index: 1;
+}
+
+.left-crease {
+  height: 45%;
+  width: 2px;
+  color: #271c02;
+  position: absolute;
+  top: 0;
+  left: 20%;
+  z-index: 1;
+}
+.right-crease {
+  height: 45%;
+  width: 2px;
+  color: #271c02;
+  position: absolute;
+  top: 1;
+  left: 20%;
+  z-index: 0;
 }
 
 #baby {
@@ -296,7 +331,7 @@ p {
 
 .scenery {
   position: absolute;
-  z-index: 0;
+  z-index: 3;
 }
 
 #scoreboard {
@@ -307,10 +342,10 @@ p {
   position: absolute;
   height: 30px;
   width: 200px;
-  padding: 10px;
+  padding: 15px;
   border-radius: 8px;
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  right: 40px;
   z-index: 99;
 }
 #scoreTitle {
@@ -340,13 +375,18 @@ p {
 }
 
 #sofa {
-  top: 30%;
+  top: 35%;
   left: 38%;
 }
 
 #smallbookshelf {
   left: 75%;
   top: 4%;
+}
+
+#smallpot {
+  left: 64%;
+  top: 45%;
 }
 
 #stool {
@@ -357,6 +397,13 @@ p {
 #twincabinet {
   left: 5%;
   top: 5%;
+}
+
+#wallhangings {
+  top: 0;
+  left: 50%;
+  margin: 0 auto;
+  transform: translate(-50%, 0%);
 }
 
 // ACTIONS
@@ -377,4 +424,11 @@ p {
 
 .tip-left {
   animation: tip-over-left 0.3s 1 ease-in forwards;
+}
+
+.gone {
+  display: none;
+}
+.win,
+.lose {
 }

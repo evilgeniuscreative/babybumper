@@ -12,7 +12,6 @@ const items = document.querySelectorAll( '.item' );
 const babyIcon = document.getElementById( 'baby' );
 const objLocationMap = {};
 console.log( 'items', items );
-
 items.forEach( ( item, i ) => {
     console.log( 'item', i, item.dataset.name );
 
@@ -25,6 +24,9 @@ items.forEach( ( item, i ) => {
         bottom: Math.round( item.getBoundingClientRect().bottom ),
         left  : Math.round( item.getBoundingClientRect().left ),
         right : Math.round( item.getBoundingClientRect().right ),
+        height: Math.round( item.getBoundingClientRect().height ),
+        width : Math.round( item.getBoundingClientRect().width ),
+
     };
 } );
 console.log( 'locations', objLocationMap );
@@ -32,14 +34,8 @@ console.log( 'locations', objLocationMap );
 class baby {
     constructor( name ) {
         this.name = name;
-        this.babyPos = {
-            top   : Math.round( babyIcon.getBoundingClientRect().top ),
-            bottom: Math.round( babyIcon.getBoundingClientRect().bottom ),
-            left  : Math.round( babyIcon.getBoundingClientRect().left ),
-            right : Math.round( babyIcon.getBoundingClientRect().right )
-        }
+        this.babyPos = {top: babyIcon.offsetTop, left: babyIcon.offsetLeft};
     }
-
 
     setDirectionClass( direction ) {
         babyIcon.className = '';
@@ -88,36 +84,24 @@ class baby {
     }
 
     isTouching() {
-        let verticalTouch = false;
-        let horizontalTouch = false;
-        Object.entries( objLocationMap ).forEach( ( entry ) => {
-            const [itemName, itemPos] = entry;
-            console.log( 'NAME:', itemName, 'COORD:', itemPos );
-            console.log( 'babyPosition', this.babyPos );
+        const babyRect = babyIcon.getBoundingClientRect();
 
-// if it's in-between the item top and bottom AND in-between item's left and right, it's touching
-            // top 0 => top 1000
-            // left 0 => left 1000
-            // top is inside or bottom is inside
-            // left is inside or right is inside
+        let isColliding = false;
 
-            const topTouch = this.babyPos.top <= itemPos.bottom;
-            const bottomTouch = this.babyPos.bottom >= itemPos.top;
-            const leftTouch = this.babyPos.left <= itemPos.right;
-            const rightTouch = this.babyPos.right >= itemPos.left;
+        items.forEach( ( item ) => {
+            const itemRect = item.getBoundingClientRect();
 
-            const hTouch = this.babyPos.right <= itemPos.left && this.babyPos.left >= itemPos.right; // horizontal plane match
+            const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
+            const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
-            const vTouch = this.babyPos.top <= itemPos.bottom && this.babyPos.bottom >= itemPos.top; // vertical plane match
-
-            // console.log( 'topT:', topTouch, 'botT:', bottomTouch, 'leftT:', leftTouch, 'rightT:', rightTouch );
-            console.log( 'vertical:', vTouch, 'horiz:', hTouch );
-            console.log( 'isTouching:', hTouch && vTouch );
-
+            if ( horizontalOverlap && verticalOverlap ) {
+                console.log( 'Baby is colliding with item:', item.dataset.name );
+                isColliding = true;
+            }
         } );
 
-        if ( horizontalTouch || verticalTouch ) {
-            // Elements are touching each other
+        if ( !isColliding ) {
+            console.log( 'Baby is not colliding with any item.' );
         }
     }
 }

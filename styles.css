@@ -46,7 +46,7 @@ main {
   border-top-color: turquoise;
   border-bottom-color: blue;
   border-left-color: lavenderblush;
-  boder-right-color: red;
+  border-right-color: red;
   height: 192px;
   width: 244px;
   position: absolute;
@@ -109,5 +109,3 @@ main {
 .tip-left {
   animation: tip-over-left 0.3s 1 ease-in forwards;
 }
-
-/*# sourceMappingURL=styles.css.map */

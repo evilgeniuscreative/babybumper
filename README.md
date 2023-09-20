@@ -12,8 +12,11 @@ A game in which you can move a baby around a living room and knock over objects 
 
 ### TECHNOLOGIES USED
 
-HTML, CSS, SCSS, Javascript
+HTML, CSS, SCSS, Javascript, Gulp
 
 ### WIREFRAMES
 
 ### UNSOLVED OR MAJOR HURDLES
+- Nothing left unsolved at this point, However I had a great deal of difficulty in getting the collision logic to work, requiring help from the instructors.
+
+- A minor challenge in using the audio methods but figured that one out

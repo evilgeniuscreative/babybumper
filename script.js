@@ -1,26 +1,32 @@
-ScriptProcessorNode;
 /*
  *
- *
- *
+ * BABY BUMPER
+ * The game where you're the baby for real this time ;)
  *
  */
-const items = document.querySelectorAll('.item');
-const babyIcon = document.getElementById('baby');
-const enterBabyName = document.getElementById('enterBabyName');
+const items = document.querySelectorAll('.item'); // items.length = total number of items
+const babyContainer = document.getElementById('baby');
+const inputBabyName = document.getElementById('inputBabyName');
 const startButton = document.getElementById('start');
-const modal = document.getElementById('modalBG');
+const modalBG = document.getElementById('modalBG');
+const startModal = document.getElementById('startModal');
+const endModal = document.getElementById('endModal');
 const babyName = document.getElementById('babyName');
-const scorekeeper = document.getElementById('score');
-let screenBaby;
-let gameRunning = false;
-let score = 0;
-// baby image is 244 x 192
+const runningScoreDisplay = document.getElementById('runningScoreDisplay');
+let runningScore = parseInt(runningScoreDisplay.textContent);
+
+const startRegex = /enter|return/i;
+
+let babyInstance;
+let gameIsRunning = false;
+let endDamages = 0;
 
 // set baby starting position
-babyIcon.style.top = window.innerHeight - 325 + 'px';
-babyIcon.style.left = window.innerWidth / 2 - 150 + 'px';
-const itemReference = {};
+// baby image is 244 x 192
+babyContainer.style.top = window.innerHeight - 325 + 'px';
+babyContainer.style.left = window.innerWidth / 2 - 150 + 'px';
+
+const itemPositionReference = {};
 
 // SOUNDS
 const fart = [];
@@ -37,6 +43,7 @@ for (let l = 0; l < 12; l++) {
   laugh.push(new Audio('sounds/laugh_' + l + '.mp3'));
 }
 const s_crash = new Audio('sounds/crash-loud-short.mp3');
+const s_ding = new Audio('sounds/ding.mp3');
 const s_end = new Audio('sounds/endgame.mp3');
 const s_glass_break = new Audio('sounds/glass-break-short.mp3');
 const s_glass_deeper = new Audio('sounds/glass-break-deeper.mp3');
@@ -45,7 +52,7 @@ const s_moving_chair = new Audio('sounds/moving-chair.mp3');
 const s_moving_furn = new Audio('sounds/moving-furniture.mp3');
 
 items.forEach((item, i) => {
-  itemReference[item.dataset.name] = {
+  itemPositionReference[item.dataset.name] = {
     top: Math.round(item.getBoundingClientRect().top),
     bottom: Math.round(item.getBoundingClientRect().bottom),
     left: Math.round(item.getBoundingClientRect().left),
@@ -55,79 +62,66 @@ items.forEach((item, i) => {
   };
 });
 
+//--------------  MAIN BABY CLASS  ----------------//
+
 class baby {
   constructor(name) {
     this.name = name;
-    this.babyPos = { top: babyIcon.offsetTop, left: babyIcon.offsetLeft };
+    this.babyPos = { top: babyContainer.offsetTop, left: babyContainer.offsetLeft };
   }
+
+  //-------------- SCORING  ----------------//
 
   addToScore(item) {
+    console.log('enter addToScore()');
+    let startDamages = runningScore;
+
+    //
+    const pause = (time) => {
+      return new Promise((resolve) => setTimeout(resolve, time));
+    };
+
+    console.log('startDamages', startDamages, 'runningScore', runningScore);
+
     // prevent double scoring for same item
-    if (!item.classList.contains('touched')) {
-      score += parseInt(item.dataset.cost);
-      scorekeeper.textContent = score;
+    if (!item.classList.contains('damaged')) {
+      item.classList.add('damaged');
+      endDamages += parseInt(item.dataset.cost);
+      console.log('endDamages', endDamages);
+
+      // iterate up to totalDamages by 1 for visual engagement
+      // Promise script by https://javascript.plainenglish.io/javascript-slow-down-for-loop-9d1caaeeeeed
+      let scoreLoop = async () => {
+        let incr = 1;
+
+        if (endDamages - startDamages > 1000) {
+          incr = 5;
+        }
+
+        for (let d = startDamages; d <= endDamages; d += incr) {
+          await pause(1);
+          runningScoreDisplay.textContent = d > item.dataset.cost ? endDamages - incr : d;
+        }
+      };
+
+      scoreLoop().then(() => {
+        runningScoreDisplay.classList.add('mischief-managed');
+        setTimeout(() => {
+          runningScoreDisplay.classList.remove('mischief-managed');
+          s_ding.play();
+        }, 600);
+      });
+
+      runningScore = parseInt(runningScoreDisplay.textContent);
     }
   }
 
-  bounceBabyBack(item) {
-    // get the word for current direction, i., right, left, etc.
-    let currentDir = babyIcon.className.slice(babyIcon.className.indexOf('-') + 1);
-    // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+  //--------------  SOUND ACTIONS  ----------------//
 
-    item.classList.remove('tilt-left');
-    item.classList.remove('tilt-right');
-    switch (currentDir) {
-      case 'left':
-        this.tipIt('left', item);
-        s_collision.play();
-        this.cry();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.left = Math.round(this.babyPos.left + 30);
-        babyIcon.style.left = this.babyPos.left + 'px';
-        break;
-      case 'right':
-        this.tipIt('right', item);
-        s_collision.play();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.right = Math.round(this.babyPos.left - 30);
-        break;
-      case 'up':
-        this.tipIt('rand', item);
-        s_collision.play();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.top = Math.round(this.babyPos.top + 30);
-        break;
-      case 'down':
-        this.tipIt('rand', item);
-        s_collision.play();
-        if (item.classList.contains('touched')) {
-          this.giggle();
-        } else {
-          this.cry();
-        }
-        this.babyPos.top = Math.round(this.babyPos.top - 30);
-        break;
-      default:
-        throw new Error("Oops, there's a bounceback issue. Can't tell where he's coming from.");
-        break;
-    }
-    this.babyPos.right = babyIcon.getBoundingClientRect().right;
-    this.babyPos.bottom = babyIcon.getBoundingClientRect().bottom;
-  }
-
-  cry() {
+  noiseAfterBump() {
+    s_collision.play();
+    s_crash.play();
+    s_glass_deeper.play();
     setTimeout(() => {
       document.getElementById('babyImg').src = 'img/baby-cry.webp';
       s_crying.play();
@@ -141,33 +135,95 @@ class baby {
   giggle() {
     laugh[0].play();
   }
+
+  //--------------  MOVEMENT AND COLLISSIONS  ----------------//
+
+  bounceBabyBack(item) {
+    // get the word for current direction, i., right, left, etc.
+    let currentDirection = babyContainer.className.slice(babyContainer.className.indexOf('-') + 1);
+    // since we're only operating on x and y, treat up and down as one direction, and left and right as the other.
+    let bounceAmount = 40;
+
+    function collisionActions() {
+      s_collision.play();
+      if (item.classList.contains('touched')) {
+        babyInstance.giggle();
+        bounceAmount = 60;
+      } else {
+        babyInstance.noiseAfterBump();
+      }
+    }
+    item.classList.remove('tilt-left');
+    item.classList.remove('tilt-right');
+    switch (currentDirection) {
+      case 'left':
+        this.tipIt('left', item);
+        collisionActions();
+        this.babyPos.left = Math.round(this.babyPos.left + bounceAmount);
+        babyContainer.style.left = this.babyPos.left + 'px';
+        break;
+      case 'right':
+        this.tipIt('right', item);
+        collisionActions();
+        this.babyPos.right = Math.round(this.babyPos.left - bounceAmount);
+        break;
+      case 'up':
+        this.tipIt('rand', item);
+        collisionActions();
+        this.babyPos.top = Math.round(this.babyPos.top + bounceAmount);
+        break;
+      case 'down':
+        this.tipIt('rand', item);
+        collisionActions();
+        this.babyPos.top = Math.round(this.babyPos.top - bounceAmount);
+        break;
+      default:
+        throw new Error("Oops, there's a bounceback issue. Can't tell where he's coming from.");
+        break;
+    }
+    this.babyPos.right = babyContainer.getBoundingClientRect().right;
+    this.babyPos.bottom = babyContainer.getBoundingClientRect().bottom;
+  }
+
+  collisionTest(item) {
+    const babyRect = babyContainer.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
+    const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
+    return horizontalOverlap && verticalOverlap;
+  }
+
   isTouching() {
-    const babyRect = babyIcon.getBoundingClientRect();
+    //const babyRect = babyContainer.getBoundingClientRect();
 
     let isColliding = false;
 
     items.forEach((item) => {
-      const itemRect = item.getBoundingClientRect();
+      //const itemRect = item.getBoundingClientRect();
+      //const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
+      //const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
 
-      const horizontalOverlap = babyRect.left <= itemRect.right && babyRect.right >= itemRect.left;
-      const verticalOverlap = babyRect.top <= itemRect.bottom && babyRect.bottom >= itemRect.top;
-
-      if (horizontalOverlap && verticalOverlap) {
+      if (this.collisionTest(item)) {
+        // if it's colliding, add touched, set isColliding, bounceBabyBack, and addToScore
+        item.classList.add('touched');
         isColliding = true;
         this.bounceBabyBack(item);
-        item.classList.add('touched');
         this.addToScore(item);
+
+        if (items.length === document.getElementsByClassName('touched').length) {
+          this.endGame();
+        }
       }
     });
 
-    if (!isColliding) {
-      //console.log('Baby is not colliding with any item.');
-    }
+    // if (!isColliding) {
+    //   //console.log('Baby is not colliding with any item.');
+    // }
   }
 
   move(e) {
     e = e || window.Event;
-    //console.log('moving', e.key);
+    console.log('moving', e.key);
     switch (e.key) {
       // up arrow
       case 'ArrowUp':
@@ -193,18 +249,20 @@ class baby {
         throw new Error('Something is wrong in the direction switch, user probably pressed not an arrow key. Do nothing. Keypress was:', e.key);
         break;
     }
-    this.babyPos.right = babyIcon.getBoundingClientRect().right;
-    this.babyPos.bottom = babyIcon.getBoundingClientRect().top;
+    this.babyPos.right = babyContainer.getBoundingClientRect().right;
+    this.babyPos.bottom = babyContainer.getBoundingClientRect().top;
     this.isTouching();
   }
 
+  //--------------  ORIENTATION  ----------------//
+
   setDirectionClass(direction) {
-    babyIcon.className = '';
-    babyIcon.classList.add('going-' + direction);
+    babyContainer.className = '';
+    babyContainer.classList.add('going-' + direction);
     if (direction === 'up' || direction === 'down') {
-      babyIcon.style.top = this.babyPos.top + 'px';
+      babyContainer.style.top = this.babyPos.top + 'px';
     } else if (direction === 'left' || direction === 'right') {
-      babyIcon.style.left = this.babyPos.left + 'px';
+      babyContainer.style.left = this.babyPos.left + 'px';
     }
   }
 
@@ -217,49 +275,92 @@ class baby {
       let rand = Math.floor(Math.random() * 2);
       rand = 0 ? item.classList.add('tip-left') : item.classList.add('tip-right');
     }
-    this.addToScore(item);
+    //make sure baby isn't still colliding by moving baby out of item bounds towards center
+  }
+
+  startGame() {
+    babyName.textContent = inputBabyName.value.toUpperCase() + "'S";
+    gameIsRunning = true;
+
+    modalBG.classList.add('hide');
+    startModal.classList.add('hide', 'gone');
+
+    // place it behind everything else
+    setTimeout(() => {
+      modalBG.style.zIndex = -10;
+    }, 505);
+  }
+
+  endGame() {
+    console.log('Game Ended');
+    modalBG.classList.remove('hide');
+    setTimeout(() => {
+      modalBG.style.zIndex = 100;
+    }, 300);
+    endModal.style.zIndex = 101;
+    endModal.classList.remove('hide');
+    document.querySelector('.win').classList.remove('hide');
   }
 }
 
+function liftOff() {
+  babyInstance = new baby(inputBabyName.value);
+  babyInstance.startGame();
+}
+//--------------  EVENT LISTENERS  ----------------//
+
 window.addEventListener('keydown', (e) => {
-  if (gameRunning) {
-    screenBaby.move(e);
+  if (gameIsRunning) {
+    babyInstance.move(e);
   }
 });
 
-enterBabyName.addEventListener('keyup', () => {
-  if (enterBabyName.value.length > 1) {
+inputBabyName.addEventListener('keyup', () => {
+  if (inputBabyName.value.length > 1) {
     startButton.disabled = false;
   }
 });
 
-startButton.addEventListener('click', () => {
-  screenBaby = new baby(enterBabyName.value);
-  babyName.textContent = enterBabyName.value.toUpperCase() + "'S";
-  gameRunning = true;
-  modal.classList.add('hide');
-  setTimeout(() => {
-    modal.style.zIndex = -10;
-  }, 505);
+inputBabyName.addEventListener('keypress', (e) => {
+  console.log('e.key', e.key, e.key.match(startRegex) !== null);
+  if (e.key.match(startRegex) !== null) {
+    liftOff();
+  }
 });
 
-let iterations = 1;
-(function gig(iterations) {
-  iterations += 1;
-  if (iterations <= 50) {
-    // TODO: need to create a minimum time between noises
-    let soundPause = Math.floor(Math.random() * 200000 + 14000);
-    setTimeout(() => {
-      let laughOrFart = Math.floor(Math.random() * 10);
-      if (laughOrFart === 0) {
-        // fart
-        let fartNum = Math.floor(Math.random() * 3);
-        fart[fartNum].play();
-      } else {
-        let laughNum = Math.floor(Math.random() * 10);
-        laugh[laughNum].play();
-      }
-    }, soundPause);
-    gig(iterations);
+startButton.addEventListener('click', () => {
+  liftOff();
+});
+
+babyContainer.addEventListener('click', () => {
+  babyInstance.endGame();
+});
+//--------------  RANDOM NOISES  ----------------//
+
+// set a random timeout
+// then play a random sound
+
+function soundPause() {
+  let delayTime = Math.floor(Math.random() * 5000 + 2500);
+  return delayTime;
+}
+
+function makeNoises() {
+  console.log('make noises');
+  let laughOrFart = Math.floor(Math.random() * 10);
+  if (laughOrFart === 0) {
+    // fart
+    let fartNum = Math.floor(Math.random() * 3);
+    fart[fartNum].play();
+  } else {
+    let laughNum = Math.floor(Math.random() * 10);
+    laugh[laughNum].play();
   }
-})(iterations);
+}
+
+// (function noiseLoop() {
+//   setTimeout(() => {
+//     makeNoises();
+//     noiseLoop();
+//   }, soundPause());
+// })();

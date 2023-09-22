@@ -11,21 +11,43 @@
     <title>Baby Bumper Game</title>
   </head>
   <body>
-    <section id="modalBG">
-      <article id="modal">
-        <h1>Baby Bumper!</h1>
-        <p>What's your baby's name?</p>
-        <input type="text" id="enterBabyName" />
-        <button id="start" disabled="disabled">Let's Go!</button>
+    <section id="modalBG"></section>
+    <section id="startModal">
+      <h1>Baby Bumper!</h1>
+      <p>What's your baby's name?</p>
+      <input type="text" id="inputBabyName" class="enter-baby-name" />
+      <button id="start" disabled="disabled">Let's Go!</button>
+    </section>
+    <section id="endModal" class="hide">
+      <article class="win hide">
+        <h1>Congratulations! You helped <span class="enter-baby-name"></span> destroy the living room!</h1>
+        <img id="baby-win" src="img/baby-win.webp" />
+      </article>
+      <!-- Future functionality with timer
+         <article class="lose hide gone">
+        <h1>Wah! You and <span class="enter-baby-name"></span> didn't destroy the living room in time!</h1>
+        <h4>How could you do this to a child? You monster.</h4>
+        <img id="baby-lose" src="img/baby-lose.webp" />
+      </article> 
+    -->
+    </section>
+    <section id="info" class="hide">
+      <article id="instructions">
+        <ol>
+          <li>Enter your baby's name and click <code>Let's Go</code> or press <code>Enter</code></li>
+          <li>Use the arrow keys to control the baby's direction.</li>
+          <li>Try to knock over all the furniture in the living room that you can.</li>
+          <li>Enjoy buying more furniture.</li>
+        </ol>
       </article>
     </section>
     <main>
       <section id="scoreboard">
         <div id="scoreTitle">
           <div id="babyName"></div>
-          <div>SCORE</div>
+          <div>DAMAGES</div>
         </div>
-        <div id="score">0000</div>
+        <div id="damages">$ <span id="runningScoreDisplay">0000</span></div>
       </section>
       <section id="livingRoom">
         <figure id="baby" data-name="baby">
@@ -43,12 +65,21 @@
         <figure class="item" id="smallbookshelf" data-name="smallbookshelf" data-cost="225">
           <img src="img/smallbookshelf.webp" alt="Small Bookshelf" />
         </figure>
+        <figure class="item" id="smallpot" data-name="smallpot" data-cost="25">
+          <img src="img/smallpot.webp" alt="Small Potted Plant" />
+        </figure>
         <figure class="item" id="cabinet" data-name="cabinet" data-cost="350">
           <img src="img/cabinet.webp" alt="Cabinet" />
         </figure>
         <figure id="rug" class="scenery" data-name="rug" data-cost="2200">
           <img src="img/abstract_rug.webp" alt="Abstract mid century rug" />
         </figure>
+        <figure id="wallhangings" class="scenery" data-name="wallhangings" data-cost="825">
+          <img src="img/wallhangings.webp" alt="Wall hangings" />
+        </figure>
+        <figure class-="scenery floor-crease"></figure>
+        <figure class-="scenery left-crease"></figure>
+        <figure class-="scenery right-crease"></figure>
       </section>
     </main>
   </body>

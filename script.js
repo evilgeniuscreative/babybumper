@@ -36,7 +36,7 @@ babyContainer.style.left = window.innerWidth / 2 - 150 + 'px';
 
 const itemPositionReference = {};
 
-// SOUNDS -- commented out are more for future use
+// SOUNDS -- some commented out are more for future use
 const fart = [];
 const laugh = [];
 
@@ -264,8 +264,6 @@ class baby {
           item.collisions = 1;
           this.addToScore(item);
           this.bounceBabyBack(item);
-
-          // remove baby from object towards centerpoint: window.innerHeight/2 window.innerWidth/2
         } else {
           item.collisions++;
 

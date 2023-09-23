@@ -231,34 +231,35 @@ p {
   z-index: 5;
 }
 
-.floor-crease {
-  color: #271c02;
-  height: 2px;
-  left: 0;
-  position: absolute;
-  top: 45%;
-  width: 100%;
-  z-index: 1;
-}
+// For future styling
+// .floor-crease {
+//   color: #271c02;
+//   height: 2px;
+//   left: 0;
+//   position: absolute;
+//   top: 45%;
+//   width: 100%;
+//   z-index: 1;
+// }
 
-.left-crease {
-  color: #271c02;
-  height: 45%;
-  left: 20%;
-  position: absolute;
-  top: 0;
-  width: 2px;
-  z-index: 1;
-}
-.right-crease {
-  color: #271c02;
-  height: 45%;
-  left: 20%;
-  position: absolute;
-  top: 1;
-  width: 2px;
-  z-index: 0;
-}
+// .left-crease {
+//   color: #271c02;
+//   height: 45%;
+//   left: 20%;
+//   position: absolute;
+//   top: 0;
+//   width: 2px;
+//   z-index: 1;
+// }
+// .right-crease {
+//   color: #271c02;
+//   height: 45%;
+//   left: 20%;
+//   position: absolute;
+//   top: 1;
+//   width: 2px;
+//   z-index: 0;
+// }
 
 #baby {
   bottom: 0px;
